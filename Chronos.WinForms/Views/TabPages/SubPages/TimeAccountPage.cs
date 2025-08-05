@@ -24,7 +24,20 @@ namespace Chronos.Views.TabPages
         private void RefreshView()
         {
             _timeAccounts.Clear();
-            foreach (var timeAccount in _chronosCore.TimeAccountService.GetAll())
+
+            IReadOnlyList<TimeAccount> timeAccounts;
+
+            try
+            {
+                timeAccounts = _chronosCore.TimeAccountService.GetAll();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve time accounts.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            foreach (var timeAccount in timeAccounts)
             {
                 _timeAccounts.Add(new TimeAccountGridEntry(timeAccount));
             }
@@ -35,16 +48,27 @@ namespace Chronos.Views.TabPages
             var dialog = new ManageTimeAccountDialog();
             var dialogResult = dialog.ShowDialog(this);
 
-            if (dialogResult == DialogResult.OK)
+            if (dialogResult != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
             {
                 _chronosCore.TimeAccountService.Create(dialog.TimeAccountName, dialog.TimeAccountColor, dialog.TimeAccountWorktime);
-                RefreshView();
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not create time account.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            RefreshView();
         }
 
         private void GridActionBar_EditClicked(object sender, EventArgs e)
         {
-            if(!GridHelper.TryGetSingleSelectedDataBoundItem(_gridTimeAccounts.GridView, out TimeAccountGridEntry? timeAccount))
+            if (!GridHelper.TryGetSingleSelectedDataBoundItem(_gridTimeAccounts.GridView, out TimeAccountGridEntry? timeAccount))
             {
                 return;
             }
@@ -55,11 +79,22 @@ namespace Chronos.Views.TabPages
             dialog.TimeAccountWorktime = timeAccount.IsWorkTime;
             var dialogResult = dialog.ShowDialog(this);
 
-            if (dialogResult == DialogResult.OK)
+            if (dialogResult != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
             {
                 _chronosCore.TimeAccountService.Update(timeAccount.Id, dialog.TimeAccountName, dialog.TimeAccountColor, dialog.TimeAccountWorktime);
-                RefreshView();
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not update time account.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            RefreshView();
         }
 
         private void GridActionBar_RemoveClicked(object sender, EventArgs e)
@@ -69,7 +104,16 @@ namespace Chronos.Views.TabPages
                 return;
             }
 
-            _chronosCore.TimeAccountService.Remove(timeAccount.Id);
+            try
+            {
+                _chronosCore.TimeAccountService.Remove(timeAccount.Id);
+            }
+            catch(Exception exception)
+            {
+                MessageBox.Show(this, $"Could not delete time account.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
             RefreshView();
         }
     }

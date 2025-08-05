@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Chronos.Core;
+using Chronos.Core.Contracts.DataObjects;
 using Chronos.WinForms;
 using Chronos.WinForms.DataObjects;
 
@@ -38,7 +39,18 @@ namespace Chronos.Views.TabPages
         {
             _timeAccountSummaryGridEntries.Clear();
 
-            var timeAccountBalances = _chronosCore.StatisticsService.RetrieveAllTimeBalances();
+            IReadOnlyList<RelativeTimeAccountBalance> timeAccountBalances;
+
+            try
+            {
+                 timeAccountBalances = _chronosCore.StatisticsService.RetrieveAllTimeAccountBalances();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve time account balances.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             _timeAccountSummaryGridEntries.AddRange(timeAccountBalances.Select(tab => new RelativeTimeAccountBalanceGridEntry(tab.TimeAccountName, tab.AccumulatedDuration, tab.Proportion * 100.0)));
         }
 

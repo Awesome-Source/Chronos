@@ -13,7 +13,7 @@ namespace Chronos.Core.Implementations.Repositories
             _databaseAccessor = databaseAccessor;
         }
 
-        public IReadOnlyList<TimeAccountBalance> RetrieveAllTimeBalances()
+        public IReadOnlyList<TimeAccountBalance> RetrieveAllTimeAccountBalances()
         {
             var sql = @"SELECT 
                             ta.id, 

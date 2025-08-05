@@ -1,4 +1,5 @@
 ﻿using Chronos.Core;
+using Chronos.Core.Contracts.DataObjects;
 using Chronos.Views.TabPages;
 using Chronos.WinForms.Constants;
 using Chronos.WinForms.Views.Common;
@@ -62,7 +63,15 @@ namespace Chronos
 
         private void MainView_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _chronosCore.TrackingService.StopTracking(TimeOnly.FromDateTime(DateTime.Now));
+            try
+            {
+                _chronosCore.TrackingService.StopTracking(TimeOnly.FromDateTime(DateTime.Now));
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not stop tracking.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
     }
 }

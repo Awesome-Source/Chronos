@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Chronos.Core;
+using Chronos.Core.Contracts.DataObjects;
 using Chronos.Views.Dialogs;
 using Chronos.WinForms.DataObjects;
 using Chronos.WinForms.Views.Common;
@@ -33,7 +34,20 @@ namespace Chronos.Views.TabPages
         {
             _records.Clear();
             var selectedDate = DateOnly.FromDateTime(_dateTimePicker.Value);
-            foreach (var record in _chronosCore.TrackingService.GetRecordsForDay(selectedDate))
+
+            IReadOnlyList<TrackingRecord> records;
+
+            try
+            {
+                records = _chronosCore.TrackingService.GetRecordsForDay(selectedDate);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve records.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+             
+            foreach (var record in records)
             {
                 _records.Add(new TrackingRecordGridEntry(record));
             }
@@ -67,14 +81,25 @@ namespace Chronos.Views.TabPages
                 return;
             }
 
-            if(trackingRecordGridEntry.IsActive)
+            if (trackingRecordGridEntry.IsActive)
             {
                 MessageBox.Show(this, "An active record cannot be edited.");
                 return;
             }
 
-            var activities = _chronosCore.ActivityService.GetAll();
-            var objectives = _chronosCore.ObjectiveService.GetAll();
+            IReadOnlyList<Activity> activities;
+            IReadOnlyList<Objective> objectives;
+
+            try
+            {
+                activities = _chronosCore.ActivityService.GetAll();
+                objectives = _chronosCore.ObjectiveService.GetAll();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve activities or objectives.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             var dialog = new ManageTrackingRecordDialog(activities, objectives);
             dialog.ActivityId = trackingRecordGridEntry.ActivityId;
@@ -84,11 +109,22 @@ namespace Chronos.Views.TabPages
 
             var dialogResult = dialog.ShowDialog(this);
 
-            if (dialogResult == DialogResult.OK)
+            if (dialogResult != DialogResult.OK)
+            {
+                return;
+            }            
+
+            try
             {
                 _chronosCore.TrackingService.UpdateRecord(trackingRecordGridEntry.Id, TimeOnly.FromTimeSpan(dialog.Start), TimeOnly.FromTimeSpan(dialog.End));
-                RefreshView();
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not update record.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            RefreshView();
         }
 
         private void GridActionBar_RemoveClicked(object sender, EventArgs e)

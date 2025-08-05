@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Chronos.Core;
+using Chronos.Core.Contracts.DataObjects;
 using Chronos.WinForms;
 using Chronos.WinForms.DataObjects;
 
@@ -59,7 +60,18 @@ namespace Chronos.Views.TabPages
                 return;
             }
 
-            var evaluatedTrackingTargets = _chronosCore.TrackingService.GetTimeSheetForDay(selectedDate);
+            IReadOnlyList<EvaluatedTrackingTarget> evaluatedTrackingTargets;
+
+            try
+            {
+                evaluatedTrackingTargets = _chronosCore.TrackingService.GetTimeSheetForDay(selectedDate);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve time sheet data.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
             _timeSheetEntries.AddRange(evaluatedTrackingTargets.Select(ett => new TrackingTargetGridEntry(ett)));
 
             var timeAccountSummaryGridEntries = evaluatedTrackingTargets

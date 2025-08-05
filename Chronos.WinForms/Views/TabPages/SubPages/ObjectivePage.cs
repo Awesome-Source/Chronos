@@ -24,7 +24,20 @@ namespace Chronos.Views.TabPages
         private void RefreshView()
         {
             _objectives.Clear();
-            foreach (var objective in _chronosCore.ObjectiveService.GetAll())
+
+            IReadOnlyList<Objective> objectives;
+
+            try
+            {
+                objectives = _chronosCore.ObjectiveService.GetAll();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve objectives.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            foreach (var objective in objectives)
             {
                 _objectives.Add(new ObjectiveGridEntry(objective));
             }
@@ -35,11 +48,22 @@ namespace Chronos.Views.TabPages
             var dialog = new ManageObjectiveDialog();
             var dialogResult = dialog.ShowDialog(this);
 
-            if (dialogResult == DialogResult.OK)
+            if (dialogResult != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
             {
                 _chronosCore.ObjectiveService.Create(dialog.ObjectiveName, dialog.ObjectiveDescription);
-                RefreshView();
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not create objective.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            RefreshView();
         }
 
         private void GridActionBar_EditClicked(object sender, EventArgs e)
@@ -55,11 +79,22 @@ namespace Chronos.Views.TabPages
 
             var dialogResult = dialog.ShowDialog(this);
 
-            if (dialogResult == DialogResult.OK)
+            if (dialogResult != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
             {
                 _chronosCore.ObjectiveService.Update(objectiveGridEntry.Id, dialog.ObjectiveName, dialog.ObjectiveDescription);
-                RefreshView();
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not update objective.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            RefreshView();
         }
 
         private void GridActionBar_RemoveClicked(object sender, EventArgs e)
@@ -69,7 +104,16 @@ namespace Chronos.Views.TabPages
                 return;
             }
 
-            _chronosCore.ObjectiveService.Remove(objectiveGridEntry.Id);
+            try
+            {
+                _chronosCore.ObjectiveService.Remove(objectiveGridEntry.Id);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not delete objective.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             RefreshView();
         }
     }

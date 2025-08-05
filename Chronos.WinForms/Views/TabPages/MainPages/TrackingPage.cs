@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Chronos.Core;
+using Chronos.Core.Contracts.DataObjects;
 using Chronos.Views.Dialogs;
 using Chronos.WinForms.DataObjects;
 using Chronos.WinForms.Views.Common;
@@ -49,7 +50,17 @@ namespace Chronos.Views.TabPages
         private void RefreshView()
         {
             _trackingTargetGridEntries.Clear();
-            var evaluatedTrackingTargets = _chronosCore.TrackingService.GetEvaluatedTrackingTargetsForDay(DateTime.Now);
+            IReadOnlyList<EvaluatedTrackingTarget> evaluatedTrackingTargets;
+
+            try
+            {
+                evaluatedTrackingTargets = _chronosCore.TrackingService.GetEvaluatedTrackingTargetsForDay(DateTime.Now);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve tracking targets.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             foreach (var trackingTarget in evaluatedTrackingTargets)
             {
@@ -66,28 +77,69 @@ namespace Chronos.Views.TabPages
                 return;
             }
 
-            _chronosCore.TrackingService.StartTracking(trackingTargetGridEntry.TrackingTargetId, TimeOnly.FromDateTime(DateTime.Now));
+            try
+            {
+                _chronosCore.TrackingService.StartTracking(trackingTargetGridEntry.TrackingTargetId, TimeOnly.FromDateTime(DateTime.Now));
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not start tracking.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             RefreshView();
         }
 
         private void ButtonNew_Click(object sender, EventArgs e)
         {
-            var activities = _chronosCore.ActivityService.GetAll();
-            var objectives = _chronosCore.ObjectiveService.GetAll();
+            IReadOnlyList<Activity> activities;
+            IReadOnlyList<Objective> objectives;
+
+            try
+            {
+                activities = _chronosCore.ActivityService.GetAll();
+                 objectives = _chronosCore.ObjectiveService.GetAll();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve activities or objectives.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             var dialog = new StartActivityDialog(activities, objectives);
             var dialogResult = dialog.ShowDialog(this);
 
-            if (dialogResult == DialogResult.OK)
+            if (dialogResult != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
             {
                 var targetId = _chronosCore.TrackingService.CreateTarget(DateOnly.FromDateTime(DateTime.Now), dialog.ActivityId, dialog.ObjectiveId, dialog.IsPlannedActivity);
                 _chronosCore.TrackingService.StartTracking(targetId, TimeOnly.FromDateTime(DateTime.Now));
-                RefreshView();
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not start tracking.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            RefreshView();
         }
 
         private void ButtonStop_Click(object sender, EventArgs e)
         {
-            _chronosCore.TrackingService.StopTracking(TimeOnly.FromDateTime(DateTime.Now));
+            try
+            {
+                _chronosCore.TrackingService.StopTracking(TimeOnly.FromDateTime(DateTime.Now));
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not stop tracking.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             RefreshView();
         }
     }
