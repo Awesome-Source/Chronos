@@ -35,6 +35,7 @@ namespace Chronos.Core
             serviceCollection.AddSingleton<IActivityService, ActivityService>();
             serviceCollection.AddSingleton<IObjectiveService, ObjectiveService>();
             serviceCollection.AddSingleton<ITrackingService, TrackingService>();
+            serviceCollection.AddSingleton<IStatisticsService, StatisticsService>();
         }
 
         private static void RegisterRepositories(ServiceCollection serviceCollection)
@@ -45,6 +46,7 @@ namespace Chronos.Core
             serviceCollection.AddSingleton<ITrackingTargetRepository, TrackingTargetRepository>();
             serviceCollection.AddSingleton<ITrackingDayRepository, TrackingDayRepository>();
             serviceCollection.AddSingleton<ITrackingRecordRepository, TrackingRecordRepository>();
+            serviceCollection.AddSingleton<IStatisticsRepository, StatisticsRepository>();
         }
     }
 }

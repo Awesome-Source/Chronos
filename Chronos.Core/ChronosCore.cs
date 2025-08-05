@@ -13,13 +13,15 @@ namespace Chronos.Core
         public IActivityService ActivityService { get; }
         public IObjectiveService ObjectiveService { get; }
         public ITrackingService TrackingService { get; }
+        public IStatisticsService StatisticsService { get; }
 
-        public ChronosCore(ITimeAccountService timeAccountService, IActivityService activityService, IObjectiveService objectiveService, ITrackingService trackingService, DatabaseInitializer databaseInitializer)
+        public ChronosCore(ITimeAccountService timeAccountService, IActivityService activityService, IObjectiveService objectiveService, ITrackingService trackingService, IStatisticsService statisticsService, DatabaseInitializer databaseInitializer)
         {
             TimeAccountService = timeAccountService;
             ActivityService = activityService;
             ObjectiveService = objectiveService;
             TrackingService = trackingService;
+            StatisticsService = statisticsService;
             _databaseInitializer = databaseInitializer;
         }
         

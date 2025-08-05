@@ -28,56 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
+            _gridTimeAccountStatistics = new Chronos.WinForms.Views.Common.ReadOnlyGrid();
+            _labelTimeAccountStatistics = new Label();
             SuspendLayout();
             // 
-            // label1
+            // _gridTimeAccountStatistics
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(139, 100);
-            label1.Name = "label1";
-            label1.Size = new Size(151, 25);
-            label1.TabIndex = 0;
-            label1.Text = "Total logged time";
+            _gridTimeAccountStatistics.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            _gridTimeAccountStatistics.Location = new Point(3, 82);
+            _gridTimeAccountStatistics.Name = "_gridTimeAccountStatistics";
+            _gridTimeAccountStatistics.Size = new Size(1445, 724);
+            _gridTimeAccountStatistics.TabIndex = 3;
             // 
-            // label2
+            // _labelTimeAccountStatistics
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(215, 251);
-            label2.Name = "label2";
-            label2.Size = new Size(340, 25);
-            label2.TabIndex = 1;
-            label2.Text = "Accumulated time per objective this week";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(215, 359);
-            label3.Name = "label3";
-            label3.Size = new Size(371, 25);
-            label3.TabIndex = 2;
-            label3.Text = "Accumulated time per time account this week";
+            _labelTimeAccountStatistics.AutoSize = true;
+            _labelTimeAccountStatistics.Location = new Point(3, 26);
+            _labelTimeAccountStatistics.Name = "_labelTimeAccountStatistics";
+            _labelTimeAccountStatistics.Size = new Size(411, 25);
+            _labelTimeAccountStatistics.TabIndex = 4;
+            _labelTimeAccountStatistics.Text = "Accumulated durations per Time Account (all time)";
             // 
             // DashboardPage
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(_labelTimeAccountStatistics);
+            Controls.Add(_gridTimeAccountStatistics);
             Name = "DashboardPage";
             Size = new Size(1451, 809);
+            VisibleChanged += DashboardPage_VisibleChanged;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private Label label1;
-        private Label label2;
-        private Label label3;
+        private WinForms.Views.Common.ReadOnlyGrid _gridTimeAccountStatistics;
+        private Label _labelTimeAccountStatistics;
     }
 }
