@@ -29,8 +29,7 @@ namespace Chronos.Core
         {
             var patches = new List<IDatabasePatch>
             {
-                new InitialPatch(),
-                new DemoDataPatch()
+                new InitialPatch()
             };
 
             _databaseInitializer.Run(patches);
