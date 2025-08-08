@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageObjectiveDialog));
             _labelName = new Label();
             _labelDescription = new Label();
             _textBoxName = new TextBox();
@@ -102,8 +103,9 @@
             Controls.Add(_textBoxName);
             Controls.Add(_labelDescription);
             Controls.Add(_labelName);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ManageObjectiveDialog";
-            Text = "Activity";
+            Text = "Objective";
             ResumeLayout(false);
             PerformLayout();
         }

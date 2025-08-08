@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(StartActivityDialog));
             _labelActivity = new Label();
             _labelObjective = new Label();
             _buttonCancel = new Button();
@@ -128,6 +129,7 @@
             Controls.Add(_buttonOk);
             Controls.Add(_labelObjective);
             Controls.Add(_labelActivity);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "StartActivityDialog";
             Text = "Start Activity";
             ResumeLayout(false);

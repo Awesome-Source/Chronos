@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageActivityDialog));
             _comboBoxTimeAccount = new ComboBox();
             _labelName = new Label();
             _labelTimeAccount = new Label();
@@ -106,6 +107,7 @@
             Controls.Add(_labelTimeAccount);
             Controls.Add(_labelName);
             Controls.Add(_comboBoxTimeAccount);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ManageActivityDialog";
             Text = "Activity";
             ResumeLayout(false);

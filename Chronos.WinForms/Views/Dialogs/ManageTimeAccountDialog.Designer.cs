@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageTimeAccountDialog));
             _labelName = new Label();
             _labelColor = new Label();
             _labelWorkTime = new Label();
@@ -129,6 +130,7 @@
             Controls.Add(_labelWorkTime);
             Controls.Add(_labelColor);
             Controls.Add(_labelName);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ManageTimeAccountDialog";
             Text = "Time Account";
             ResumeLayout(false);

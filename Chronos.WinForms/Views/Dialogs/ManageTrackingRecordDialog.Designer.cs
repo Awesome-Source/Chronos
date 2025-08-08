@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageTrackingRecordDialog));
             _comboBoxObjective = new ComboBox();
             _labelActivity = new Label();
             _labelObjective = new Label();
@@ -152,6 +153,7 @@
             Controls.Add(_labelObjective);
             Controls.Add(_labelActivity);
             Controls.Add(_comboBoxObjective);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ManageTrackingRecordDialog";
             Text = "Manage Record";
             ResumeLayout(false);

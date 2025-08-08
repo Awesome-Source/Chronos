@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
             _panelLeft = new Panel();
             _panelTabHighlight = new Panel();
             _buttonStatistics = new Button();
@@ -176,6 +177,7 @@
             ClientSize = new Size(1775, 969);
             Controls.Add(_panelMainContent);
             Controls.Add(_panelLeft);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainView";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Chronos";
