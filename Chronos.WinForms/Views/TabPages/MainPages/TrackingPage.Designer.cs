@@ -38,10 +38,10 @@
             // _buttonStart
             // 
             _buttonStart.FlatStyle = FlatStyle.Flat;
-            _buttonStart.Location = new Point(16, 32);
-            _buttonStart.Margin = new Padding(16, 32, 3, 32);
+            _buttonStart.Location = new Point(16, 16);
+            _buttonStart.Margin = new Padding(16, 16, 2, 16);
             _buttonStart.Name = "_buttonStart";
-            _buttonStart.Size = new Size(206, 34);
+            _buttonStart.Size = new Size(144, 26);
             _buttonStart.TabIndex = 1;
             _buttonStart.Text = "Start Selected";
             _buttonStart.UseVisualStyleBackColor = true;
@@ -50,10 +50,10 @@
             // _buttonNew
             // 
             _buttonNew.FlatStyle = FlatStyle.Flat;
-            _buttonNew.Location = new Point(228, 32);
-            _buttonNew.Margin = new Padding(3, 32, 3, 32);
+            _buttonNew.Location = new Point(164, 16);
+            _buttonNew.Margin = new Padding(2, 16, 2, 16);
             _buttonNew.Name = "_buttonNew";
-            _buttonNew.Size = new Size(206, 34);
+            _buttonNew.Size = new Size(144, 26);
             _buttonNew.TabIndex = 2;
             _buttonNew.Text = "New Actvity";
             _buttonNew.UseVisualStyleBackColor = true;
@@ -62,10 +62,10 @@
             // _buttonStop
             // 
             _buttonStop.FlatStyle = FlatStyle.Flat;
-            _buttonStop.Location = new Point(440, 32);
-            _buttonStop.Margin = new Padding(3, 32, 3, 32);
+            _buttonStop.Location = new Point(312, 16);
+            _buttonStop.Margin = new Padding(2, 16, 2, 16);
             _buttonStop.Name = "_buttonStop";
-            _buttonStop.Size = new Size(206, 34);
+            _buttonStop.Size = new Size(144, 26);
             _buttonStop.TabIndex = 3;
             _buttonStop.Text = "Stop Tracking";
             _buttonStop.UseVisualStyleBackColor = true;
@@ -74,25 +74,26 @@
             // _gridTrackingTargets
             // 
             _gridTrackingTargets.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            _gridTrackingTargets.Location = new Point(0, 101);
+            _gridTrackingTargets.Location = new Point(0, 59);
+            _gridTrackingTargets.Margin = new Padding(1, 1, 1, 1);
             _gridTrackingTargets.Name = "_gridTrackingTargets";
-            _gridTrackingTargets.Size = new Size(1326, 713);
+            _gridTrackingTargets.Size = new Size(928, 430);
             _gridTrackingTargets.TabIndex = 4;
             // 
             // _labelTotalTime
             // 
             _labelTotalTime.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            _labelTotalTime.Location = new Point(1076, 32);
-            _labelTotalTime.Margin = new Padding(3, 0, 32, 0);
+            _labelTotalTime.Location = new Point(753, 19);
+            _labelTotalTime.Margin = new Padding(2, 0, 22, 0);
             _labelTotalTime.Name = "_labelTotalTime";
-            _labelTotalTime.Size = new Size(218, 34);
+            _labelTotalTime.Size = new Size(153, 20);
             _labelTotalTime.TabIndex = 5;
             _labelTotalTime.Text = "Total Time:";
             _labelTotalTime.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // TrackingPage
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
             Controls.Add(_labelTotalTime);
@@ -100,8 +101,9 @@
             Controls.Add(_buttonStop);
             Controls.Add(_buttonNew);
             Controls.Add(_buttonStart);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "TrackingPage";
-            Size = new Size(1326, 814);
+            Size = new Size(928, 488);
             ResumeLayout(false);
         }
 

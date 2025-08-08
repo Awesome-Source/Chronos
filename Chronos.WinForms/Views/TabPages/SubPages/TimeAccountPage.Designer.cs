@@ -36,8 +36,9 @@
             // 
             _gridActionBar.BackColor = Color.DarkGray;
             _gridActionBar.Location = new Point(0, 0);
+            _gridActionBar.Margin = new Padding(1, 1, 1, 1);
             _gridActionBar.Name = "_gridActionBar";
-            _gridActionBar.Size = new Size(611, 66);
+            _gridActionBar.Size = new Size(428, 42);
             _gridActionBar.TabIndex = 1;
             _gridActionBar.AddClicked += GridActionBar_AddClicked;
             _gridActionBar.EditClicked += GridActionBar_EditClicked;
@@ -46,20 +47,22 @@
             // _gridTimeAccounts
             // 
             _gridTimeAccounts.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            _gridTimeAccounts.Location = new Point(0, 72);
+            _gridTimeAccounts.Location = new Point(0, 44);
+            _gridTimeAccounts.Margin = new Padding(1, 1, 1, 1);
             _gridTimeAccounts.Name = "_gridTimeAccounts";
-            _gridTimeAccounts.Size = new Size(611, 445);
+            _gridTimeAccounts.Size = new Size(428, 266);
             _gridTimeAccounts.TabIndex = 2;
             // 
             // TimeAccountPage
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkGray;
             Controls.Add(_gridTimeAccounts);
             Controls.Add(_gridActionBar);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "TimeAccountPage";
-            Size = new Size(611, 517);
+            Size = new Size(428, 310);
             ResumeLayout(false);
         }
 

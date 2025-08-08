@@ -36,9 +36,10 @@
             // _buttonRemove
             // 
             _buttonRemove.FlatStyle = FlatStyle.Flat;
-            _buttonRemove.Location = new Point(252, 16);
+            _buttonRemove.Location = new Point(176, 8);
+            _buttonRemove.Margin = new Padding(2, 2, 2, 2);
             _buttonRemove.Name = "_buttonRemove";
-            _buttonRemove.Size = new Size(112, 34);
+            _buttonRemove.Size = new Size(78, 26);
             _buttonRemove.TabIndex = 6;
             _buttonRemove.Text = "Remove";
             _buttonRemove.UseVisualStyleBackColor = true;
@@ -47,9 +48,10 @@
             // _buttonEdit
             // 
             _buttonEdit.FlatStyle = FlatStyle.Flat;
-            _buttonEdit.Location = new Point(134, 16);
+            _buttonEdit.Location = new Point(94, 8);
+            _buttonEdit.Margin = new Padding(2, 2, 2, 2);
             _buttonEdit.Name = "_buttonEdit";
-            _buttonEdit.Size = new Size(112, 34);
+            _buttonEdit.Size = new Size(78, 26);
             _buttonEdit.TabIndex = 5;
             _buttonEdit.Text = "Edit";
             _buttonEdit.UseVisualStyleBackColor = true;
@@ -58,9 +60,10 @@
             // _buttonAdd
             // 
             _buttonAdd.FlatStyle = FlatStyle.Flat;
-            _buttonAdd.Location = new Point(16, 16);
+            _buttonAdd.Location = new Point(11, 8);
+            _buttonAdd.Margin = new Padding(2, 2, 2, 2);
             _buttonAdd.Name = "_buttonAdd";
-            _buttonAdd.Size = new Size(112, 34);
+            _buttonAdd.Size = new Size(78, 26);
             _buttonAdd.TabIndex = 4;
             _buttonAdd.Text = "Add";
             _buttonAdd.UseVisualStyleBackColor = true;
@@ -68,14 +71,15 @@
             // 
             // GridActionBar
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkGray;
             Controls.Add(_buttonRemove);
             Controls.Add(_buttonEdit);
             Controls.Add(_buttonAdd);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "GridActionBar";
-            Size = new Size(380, 66);
+            Size = new Size(266, 42);
             ResumeLayout(false);
         }
 

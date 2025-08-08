@@ -36,8 +36,9 @@
             // 
             _gridActionBar.BackColor = Color.DarkGray;
             _gridActionBar.Location = new Point(0, 0);
+            _gridActionBar.Margin = new Padding(1, 1, 1, 1);
             _gridActionBar.Name = "_gridActionBar";
-            _gridActionBar.Size = new Size(587, 66);
+            _gridActionBar.Size = new Size(411, 42);
             _gridActionBar.TabIndex = 5;
             _gridActionBar.AddClicked += GridActionBar_AddClicked;
             _gridActionBar.EditClicked += GridActionBar_EditClicked;
@@ -46,20 +47,22 @@
             // _gridActivities
             // 
             _gridActivities.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            _gridActivities.Location = new Point(0, 72);
+            _gridActivities.Location = new Point(0, 44);
+            _gridActivities.Margin = new Padding(1, 1, 1, 1);
             _gridActivities.Name = "_gridActivities";
-            _gridActivities.Size = new Size(587, 514);
+            _gridActivities.Size = new Size(411, 307);
             _gridActivities.TabIndex = 6;
             // 
             // ActivityPage
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkGray;
             Controls.Add(_gridActivities);
             Controls.Add(_gridActionBar);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "ActivityPage";
-            Size = new Size(587, 586);
+            Size = new Size(411, 352);
             ResumeLayout(false);
         }
 
