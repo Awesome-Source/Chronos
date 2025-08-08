@@ -26,7 +26,7 @@ namespace Chronos.Views.TabPages
         {
             if (e.Value is TimeOnly timeOnly)
             {
-                e.Value = $"{timeOnly.Hour}:{timeOnly.Minute}:{timeOnly.Second}";
+                e.Value = timeOnly.ToLongTimeString();
             }
         }
 

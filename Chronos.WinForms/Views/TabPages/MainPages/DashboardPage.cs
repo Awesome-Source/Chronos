@@ -24,11 +24,6 @@ namespace Chronos.Views.TabPages
 
         private void GridView_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.Value is TimeSpan timeSpan)
-            {
-                e.Value = $"{timeSpan.Hours}:{timeSpan.Minutes}:{timeSpan.Seconds}";
-            }
-
             if(e.Value is double percentage)
             {
                 e.Value = $"{percentage:F2} %";
