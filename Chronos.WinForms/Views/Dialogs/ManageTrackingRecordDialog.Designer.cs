@@ -48,26 +48,29 @@
             _comboBoxObjective.Enabled = false;
             _comboBoxObjective.FlatStyle = FlatStyle.Flat;
             _comboBoxObjective.FormattingEnabled = true;
-            _comboBoxObjective.Location = new Point(172, 48);
+            _comboBoxObjective.Location = new Point(120, 29);
+            _comboBoxObjective.Margin = new Padding(2, 2, 2, 2);
             _comboBoxObjective.Name = "_comboBoxObjective";
-            _comboBoxObjective.Size = new Size(270, 33);
+            _comboBoxObjective.Size = new Size(190, 23);
             _comboBoxObjective.TabIndex = 0;
             // 
             // _labelActivity
             // 
             _labelActivity.AutoSize = true;
-            _labelActivity.Location = new Point(12, 9);
+            _labelActivity.Location = new Point(8, 5);
+            _labelActivity.Margin = new Padding(2, 0, 2, 0);
             _labelActivity.Name = "_labelActivity";
-            _labelActivity.Size = new Size(70, 25);
+            _labelActivity.Size = new Size(47, 15);
             _labelActivity.TabIndex = 1;
             _labelActivity.Text = "Activity";
             // 
             // _labelObjective
             // 
             _labelObjective.AutoSize = true;
-            _labelObjective.Location = new Point(12, 51);
+            _labelObjective.Location = new Point(8, 31);
+            _labelObjective.Margin = new Padding(2, 0, 2, 0);
             _labelObjective.Name = "_labelObjective";
-            _labelObjective.Size = new Size(86, 25);
+            _labelObjective.Size = new Size(57, 15);
             _labelObjective.TabIndex = 2;
             _labelObjective.Text = "Objective";
             // 
@@ -75,9 +78,10 @@
             // 
             _buttonCancel.DialogResult = DialogResult.Cancel;
             _buttonCancel.FlatStyle = FlatStyle.Flat;
-            _buttonCancel.Location = new Point(330, 198);
+            _buttonCancel.Location = new Point(229, 127);
+            _buttonCancel.Margin = new Padding(2, 2, 2, 2);
             _buttonCancel.Name = "_buttonCancel";
-            _buttonCancel.Size = new Size(112, 34);
+            _buttonCancel.Size = new Size(78, 26);
             _buttonCancel.TabIndex = 9;
             _buttonCancel.Text = "Cancel";
             _buttonCancel.UseVisualStyleBackColor = true;
@@ -86,9 +90,10 @@
             // 
             _buttonOk.DialogResult = DialogResult.OK;
             _buttonOk.FlatStyle = FlatStyle.Flat;
-            _buttonOk.Location = new Point(212, 198);
+            _buttonOk.Location = new Point(146, 127);
+            _buttonOk.Margin = new Padding(2, 2, 2, 2);
             _buttonOk.Name = "_buttonOk";
-            _buttonOk.Size = new Size(112, 34);
+            _buttonOk.Size = new Size(78, 26);
             _buttonOk.TabIndex = 8;
             _buttonOk.Text = "Ok";
             _buttonOk.UseVisualStyleBackColor = true;
@@ -100,49 +105,54 @@
             _comboBoxActivity.Enabled = false;
             _comboBoxActivity.FlatStyle = FlatStyle.Flat;
             _comboBoxActivity.FormattingEnabled = true;
-            _comboBoxActivity.Location = new Point(172, 9);
+            _comboBoxActivity.Location = new Point(120, 5);
+            _comboBoxActivity.Margin = new Padding(2, 2, 2, 2);
             _comboBoxActivity.Name = "_comboBoxActivity";
-            _comboBoxActivity.Size = new Size(270, 33);
+            _comboBoxActivity.Size = new Size(190, 23);
             _comboBoxActivity.TabIndex = 10;
             // 
             // _textBoxStart
             // 
-            _textBoxStart.Location = new Point(172, 87);
+            _textBoxStart.Location = new Point(120, 52);
+            _textBoxStart.Margin = new Padding(2, 2, 2, 2);
             _textBoxStart.Name = "_textBoxStart";
-            _textBoxStart.Size = new Size(270, 31);
+            _textBoxStart.Size = new Size(190, 23);
             _textBoxStart.TabIndex = 11;
             // 
             // _textBoxEnd
             // 
-            _textBoxEnd.Location = new Point(172, 124);
+            _textBoxEnd.Location = new Point(120, 74);
+            _textBoxEnd.Margin = new Padding(2, 2, 2, 2);
             _textBoxEnd.Name = "_textBoxEnd";
-            _textBoxEnd.Size = new Size(270, 31);
+            _textBoxEnd.Size = new Size(190, 23);
             _textBoxEnd.TabIndex = 12;
             // 
             // _labelStart
             // 
             _labelStart.AutoSize = true;
-            _labelStart.Location = new Point(12, 90);
+            _labelStart.Location = new Point(8, 54);
+            _labelStart.Margin = new Padding(2, 0, 2, 0);
             _labelStart.Name = "_labelStart";
-            _labelStart.Size = new Size(48, 25);
+            _labelStart.Size = new Size(31, 15);
             _labelStart.TabIndex = 13;
             _labelStart.Text = "Start";
             // 
             // _labelEnd
             // 
             _labelEnd.AutoSize = true;
-            _labelEnd.Location = new Point(12, 127);
+            _labelEnd.Location = new Point(8, 76);
+            _labelEnd.Margin = new Padding(2, 0, 2, 0);
             _labelEnd.Name = "_labelEnd";
-            _labelEnd.Size = new Size(42, 25);
+            _labelEnd.Size = new Size(27, 15);
             _labelEnd.TabIndex = 14;
             _labelEnd.Text = "End";
             // 
             // ManageTrackingRecordDialog
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(454, 244);
+            ClientSize = new Size(318, 164);
             Controls.Add(_labelEnd);
             Controls.Add(_labelStart);
             Controls.Add(_textBoxEnd);
@@ -154,6 +164,7 @@
             Controls.Add(_labelActivity);
             Controls.Add(_comboBoxObjective);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(2, 2, 2, 2);
             Name = "ManageTrackingRecordDialog";
             Text = "Manage Record";
             ResumeLayout(false);

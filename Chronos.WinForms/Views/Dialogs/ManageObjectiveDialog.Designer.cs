@@ -40,35 +40,39 @@
             // _labelName
             // 
             _labelName.AutoSize = true;
-            _labelName.Location = new Point(12, 9);
+            _labelName.Location = new Point(8, 5);
+            _labelName.Margin = new Padding(2, 0, 2, 0);
             _labelName.Name = "_labelName";
-            _labelName.Size = new Size(59, 25);
+            _labelName.Size = new Size(39, 15);
             _labelName.TabIndex = 1;
             _labelName.Text = "Name";
             // 
             // _labelDescription
             // 
             _labelDescription.AutoSize = true;
-            _labelDescription.Location = new Point(12, 51);
+            _labelDescription.Location = new Point(8, 31);
+            _labelDescription.Margin = new Padding(2, 0, 2, 0);
             _labelDescription.Name = "_labelDescription";
-            _labelDescription.Size = new Size(102, 25);
+            _labelDescription.Size = new Size(67, 15);
             _labelDescription.TabIndex = 2;
             _labelDescription.Text = "Description";
             // 
             // _textBoxName
             // 
-            _textBoxName.Location = new Point(172, 6);
+            _textBoxName.Location = new Point(120, 4);
+            _textBoxName.Margin = new Padding(2, 2, 2, 2);
             _textBoxName.Name = "_textBoxName";
-            _textBoxName.Size = new Size(270, 31);
+            _textBoxName.Size = new Size(190, 23);
             _textBoxName.TabIndex = 3;
             // 
             // _buttonCancel
             // 
             _buttonCancel.DialogResult = DialogResult.Cancel;
             _buttonCancel.FlatStyle = FlatStyle.Flat;
-            _buttonCancel.Location = new Point(330, 118);
+            _buttonCancel.Location = new Point(229, 75);
+            _buttonCancel.Margin = new Padding(2, 2, 2, 2);
             _buttonCancel.Name = "_buttonCancel";
-            _buttonCancel.Size = new Size(112, 34);
+            _buttonCancel.Size = new Size(78, 26);
             _buttonCancel.TabIndex = 9;
             _buttonCancel.Text = "Cancel";
             _buttonCancel.UseVisualStyleBackColor = true;
@@ -77,26 +81,28 @@
             // 
             _buttonOk.DialogResult = DialogResult.OK;
             _buttonOk.FlatStyle = FlatStyle.Flat;
-            _buttonOk.Location = new Point(212, 118);
+            _buttonOk.Location = new Point(146, 75);
+            _buttonOk.Margin = new Padding(2, 2, 2, 2);
             _buttonOk.Name = "_buttonOk";
-            _buttonOk.Size = new Size(112, 34);
+            _buttonOk.Size = new Size(78, 26);
             _buttonOk.TabIndex = 8;
             _buttonOk.Text = "Ok";
             _buttonOk.UseVisualStyleBackColor = true;
             // 
             // _textBoxDescription
             // 
-            _textBoxDescription.Location = new Point(172, 51);
+            _textBoxDescription.Location = new Point(120, 31);
+            _textBoxDescription.Margin = new Padding(2, 2, 2, 2);
             _textBoxDescription.Name = "_textBoxDescription";
-            _textBoxDescription.Size = new Size(270, 31);
+            _textBoxDescription.Size = new Size(190, 23);
             _textBoxDescription.TabIndex = 10;
             // 
             // ManageObjectiveDialog
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(454, 164);
+            ClientSize = new Size(318, 112);
             Controls.Add(_textBoxDescription);
             Controls.Add(_buttonCancel);
             Controls.Add(_buttonOk);
@@ -104,6 +110,7 @@
             Controls.Add(_labelDescription);
             Controls.Add(_labelName);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(2, 2, 2, 2);
             Name = "ManageObjectiveDialog";
             Text = "Objective";
             ResumeLayout(false);
