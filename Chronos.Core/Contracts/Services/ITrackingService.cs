@@ -5,7 +5,7 @@ namespace Chronos.Core.Contracts.Services
     public interface ITrackingService
     {
         int CreateTarget(DateOnly date, int activityId, int objectiveId, bool isPlannedActivity);
-        IReadOnlyList<EvaluatedTrackingTarget> GetEvaluatedTrackingTargetsForDay(DateTime now);
+        IReadOnlyList<EvaluatedTrackingTarget> GetEvaluatedTrackingTargetsForDay(DateTime evaluationTimeStamp);
         void StartTracking(int targetId, TimeOnly start);
         void StopTracking(TimeOnly end);
         IReadOnlyList<TrackingRecord> GetRecordsForDay(DateOnly date);

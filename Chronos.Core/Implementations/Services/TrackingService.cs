@@ -20,34 +20,39 @@ namespace Chronos.Core.Implementations.Services
 
         public int CreateTarget(DateOnly date, int activityId, int objectiveId, bool isPlannedActivity)
         {
-            var trackingDayId = GetOrCreateTrackingDay(date);
+            var trackingDayId = _trackingDayRepository.GetOrCreateTrackingDay(date);
 
             return _trackingTargetRepository.Create(trackingDayId, activityId, objectiveId, isPlannedActivity);
         }
 
-        public IReadOnlyList<EvaluatedTrackingTarget> GetEvaluatedTrackingTargetsForDay(DateTime now)
+        public IReadOnlyList<EvaluatedTrackingTarget> GetEvaluatedTrackingTargetsForDay(DateTime evaluationTimeStamp)
         {
-            var trackingDayId = GetOrCreateTrackingDay(DateOnly.FromDateTime(now));
-            var evaluationTime = TimeOnly.FromDateTime(now);
+            if(!_trackingDayRepository.TryGetTrackingDay(DateOnly.FromDateTime(evaluationTimeStamp), out var trackingDayId))
+            {
+                return new List<EvaluatedTrackingTarget>();
+            }
+
+            var evaluationTime = TimeOnly.FromDateTime(evaluationTimeStamp);
 
             return _trackingTargetRepository.GetEvaluatedTrackingTargetsForDay(trackingDayId, evaluationTime);
         }
 
-        private int GetOrCreateTrackingDay(DateOnly date)
-        {
-            return _trackingDayRepository.GetOrCreateTrackingDay(date);
-        }
-
         public IReadOnlyList<TrackingRecord> GetRecordsForDay(DateOnly date)
         {
-            var trackingDayId = _trackingDayRepository.GetOrCreateTrackingDay(date);
+            if (!_trackingDayRepository.TryGetTrackingDay(date, out var trackingDayId))
+            {
+                return new List<TrackingRecord>();
+            }
 
             return _trackingRecordRepository.GetRecordsForDay(trackingDayId);
         }
 
         public IReadOnlyList<EvaluatedTrackingTarget> GetTimeSheetForDay(DateOnly date)
         {
-            var trackingDayId = _trackingDayRepository.GetOrCreateTrackingDay(date);
+            if (!_trackingDayRepository.TryGetTrackingDay(date, out var trackingDayId))
+            {
+                return new List<EvaluatedTrackingTarget>();
+            }
 
             return _trackingTargetRepository.GetEvaluatedTrackingTargetsForDay(trackingDayId);
         }
@@ -69,7 +74,10 @@ namespace Chronos.Core.Implementations.Services
 
         public void CompleteActiveEntryInPastIfExisting(DateOnly date)
         {
-            var trackingDayId = _trackingDayRepository.GetOrCreateTrackingDay(date);
+            if (!_trackingDayRepository.TryGetTrackingDay(date, out var trackingDayId))
+            {
+                return;
+            }
 
             _trackingRecordRepository.CompleteActiveEntryInPastIfExisting(trackingDayId);
         }
