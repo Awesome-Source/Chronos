@@ -13,7 +13,7 @@ namespace Chronos.Core.Implementations.Repositories
             _databaseAccessor = databaseAccessor;
         }
 
-        public IReadOnlyList<TimeAccountBalance> RetrieveAllTimeAccountBalances()
+        public IReadOnlyList<TimeAccountBalance> RetrieveAllProductiveTimeAccountBalances()
         {
             var sql = @"SELECT 
                             ta.id, 
@@ -25,6 +25,7 @@ namespace Chronos.Core.Implementations.Repositories
                                 WHERE a.time_account_id = ta.id
                             ) AS accumulated_duration
                         FROM time_accounts ta
+                        WHERE ta.is_worktime = 1
                         ORDER BY accumulated_duration DESC";
 
             return _databaseAccessor.ExecuteQuery(sql, rp => new TimeAccountBalance(rp.GetInt("id"), rp.GetString("name"), TimeSpan.FromSeconds(rp.GetNullableInt("accumulated_duration") ?? 0)));

@@ -35,29 +35,32 @@
             // _gridTimeAccountStatistics
             // 
             _gridTimeAccountStatistics.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            _gridTimeAccountStatistics.Location = new Point(3, 82);
+            _gridTimeAccountStatistics.Location = new Point(2, 49);
+            _gridTimeAccountStatistics.Margin = new Padding(1, 1, 1, 1);
             _gridTimeAccountStatistics.Name = "_gridTimeAccountStatistics";
-            _gridTimeAccountStatistics.Size = new Size(1445, 724);
+            _gridTimeAccountStatistics.Size = new Size(1012, 434);
             _gridTimeAccountStatistics.TabIndex = 3;
             // 
             // _labelTimeAccountStatistics
             // 
             _labelTimeAccountStatistics.AutoSize = true;
-            _labelTimeAccountStatistics.Location = new Point(3, 26);
+            _labelTimeAccountStatistics.Location = new Point(2, 16);
+            _labelTimeAccountStatistics.Margin = new Padding(2, 0, 2, 0);
             _labelTimeAccountStatistics.Name = "_labelTimeAccountStatistics";
-            _labelTimeAccountStatistics.Size = new Size(411, 25);
+            _labelTimeAccountStatistics.Size = new Size(339, 15);
             _labelTimeAccountStatistics.TabIndex = 4;
-            _labelTimeAccountStatistics.Text = "Accumulated durations per Time Account (all time)";
+            _labelTimeAccountStatistics.Text = "Accumulated durations per productive Time Account (all time)";
             // 
             // DashboardPage
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
             Controls.Add(_labelTimeAccountStatistics);
             Controls.Add(_gridTimeAccountStatistics);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "DashboardPage";
-            Size = new Size(1451, 809);
+            Size = new Size(1016, 485);
             VisibleChanged += DashboardPage_VisibleChanged;
             ResumeLayout(false);
             PerformLayout();

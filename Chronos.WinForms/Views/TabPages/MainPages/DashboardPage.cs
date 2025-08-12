@@ -38,7 +38,7 @@ namespace Chronos.Views.TabPages
 
             try
             {
-                 timeAccountBalances = _chronosCore.StatisticsService.RetrieveAllTimeAccountBalances();
+                 timeAccountBalances = _chronosCore.StatisticsService.RetrieveAllProductiveTimeAccountBalances();
             }
             catch (Exception exception)
             {

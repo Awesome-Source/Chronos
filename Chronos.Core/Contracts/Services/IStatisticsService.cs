@@ -4,6 +4,6 @@ namespace Chronos.Core.Contracts.Services
 {
     public interface IStatisticsService
     {
-        IReadOnlyList<RelativeTimeAccountBalance> RetrieveAllTimeAccountBalances();
+        IReadOnlyList<RelativeTimeAccountBalance> RetrieveAllProductiveTimeAccountBalances();
     }
 }

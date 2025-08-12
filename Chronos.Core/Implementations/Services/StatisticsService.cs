@@ -13,9 +13,9 @@ namespace Chronos.Core.Implementations.Services
             _statisticsRepository = statisticsRepository;
         }
 
-        public IReadOnlyList<RelativeTimeAccountBalance> RetrieveAllTimeAccountBalances()
+        public IReadOnlyList<RelativeTimeAccountBalance> RetrieveAllProductiveTimeAccountBalances()
         {
-            var balances = _statisticsRepository.RetrieveAllTimeAccountBalances();
+            var balances = _statisticsRepository.RetrieveAllProductiveTimeAccountBalances();
             var totalDurationInSeconds = balances.Select(b => b.AccumulatedDuration.TotalSeconds).Sum();
 
             return balances
