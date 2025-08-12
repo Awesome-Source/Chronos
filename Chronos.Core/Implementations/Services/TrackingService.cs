@@ -1,7 +1,6 @@
 ﻿using Chronos.Core.Contracts.DataObjects;
 using Chronos.Core.Contracts.Repositories;
 using Chronos.Core.Contracts.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Chronos.Core.Implementations.Services
 {
@@ -80,6 +79,11 @@ namespace Chronos.Core.Implementations.Services
             }
 
             _trackingRecordRepository.CompleteActiveEntryInPastIfExisting(trackingDayId);
+        }
+
+        public bool TryGetLatestTrackingDayBefore(DateOnly date, out DateOnly latestDateBefore)
+        {
+            return _trackingDayRepository.TryGetLatestTrackingDayBefore(date, out latestDateBefore);
         }
     }
 }

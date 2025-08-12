@@ -12,5 +12,6 @@ namespace Chronos.Core.Contracts.Services
         IReadOnlyList<EvaluatedTrackingTarget> GetTimeSheetForDay(DateOnly date);
         void UpdateRecord(int recordId, TimeOnly start, TimeOnly end);
         void CompleteActiveEntryInPastIfExisting(DateOnly date);
+        bool TryGetLatestTrackingDayBefore(DateOnly date, out DateOnly latestDateBefore);
     }
 }

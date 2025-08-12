@@ -19,7 +19,7 @@ namespace Chronos.Views.TabPages
         {
             InitializeComponent();
             _chronosCore = chronosCore;
-            _dateTimePicker.Value = DateTime.Today.AddDays(-1); 
+            _dateTimePicker.Value = TryGetLatestTrackingDay();
             _gridTimeSheet.BindDataSource(_timeSheetEntries);
             _gridTimeSheet.GridView.CellFormatting += GridView_CellFormatting;
 
@@ -35,6 +35,16 @@ namespace Chronos.Views.TabPages
             _gridDayStatistics.BindDataSource(_dayStatisticsGridEntries);
             _gridDayStatistics.GridView.CellFormatting += GridView_CellFormatting;
             RefreshView();
+        }
+
+        private DateTime TryGetLatestTrackingDay()
+        {
+            if(_chronosCore.TrackingService.TryGetLatestTrackingDayBefore(DateOnly.FromDateTime(DateTime.Now), out var latestDateBefore))
+            {
+                return latestDateBefore.ToDateTime(TimeOnly.MinValue);
+            }
+
+            return DateTime.Today.AddDays(-1);
         }
 
         private void GridView_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)

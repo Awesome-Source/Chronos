@@ -55,5 +55,31 @@ namespace Chronos.Core.Implementations.Repositories
             trackingDayId = ids.Single();
             return true;
         }
+
+        public bool TryGetLatestTrackingDayBefore(DateOnly date, out DateOnly latestDateBefore)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"YEAR", date.Year },
+                {"MONTH", date.Month },
+                {"DAY", date.Day }
+            };
+
+            var dates = _databaseAccessor.ExecuteQuery("SELECT year, month, day FROM tracking_days WHERE year <> @YEAR OR month <> @MONTH OR day <> @DAY ORDER BY id DESC LIMIT 1", ParseDateOnly, parameters);
+            if (dates.Count == 0)
+            {
+                latestDateBefore = DateOnly.MinValue;
+                return false;
+
+            }
+
+            latestDateBefore = dates.Single();
+            return true;
+        }
+
+        private DateOnly ParseDateOnly(IRowParser rowParser)
+        {
+            return new DateOnly(rowParser.GetInt("year"), rowParser.GetInt("month"), rowParser.GetInt("day"));
+        }
     }
 }

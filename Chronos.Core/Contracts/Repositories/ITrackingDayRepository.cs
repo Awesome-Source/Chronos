@@ -6,5 +6,6 @@ namespace Chronos.Core.Contracts.Repositories
     {
         int GetOrCreateTrackingDay(DateOnly date);
         bool TryGetTrackingDay(DateOnly date, out int trackingDayId);
+        bool TryGetLatestTrackingDayBefore(DateOnly date, out DateOnly latestDateBefore);
     }
 }
