@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Chronos.Core.Contracts.DataObjects;
+using Chronos.WinForms.Attributes;
 
 namespace Chronos.WinForms.DataObjects
 {
@@ -9,11 +10,20 @@ namespace Chronos.WinForms.DataObjects
         public string Name { get; set; }
         public string Description { get; set; }
 
+
+        [DisplayName("Category")]
+        public string CategoryName { get; set; }
+
+        [HiddenColumn]
+        public int CategoryId { get; set; }
+
         public ObjectiveGridEntry(Objective objective)
         {
             Id = objective.Id;
             Name = objective.Name;
             Description = objective.Description;
+            CategoryName = objective.CategoryName;
+            CategoryId = objective.CategoryId;
         }        
 
         public override bool Equals(object? obj)

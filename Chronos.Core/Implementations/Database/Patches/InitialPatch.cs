@@ -93,5 +93,15 @@ namespace Chronos.Core.Implementations.Database.Patches
                                             FOREIGN KEY (tracking_target_id) REFERENCES tracking_targets (id)
                                         ) STRICT;");
         }
+
+        public void BeforeExecution(IDatabaseAccessor databaseAccessor)
+        {
+
+        }
+
+        public void AfterExecution(IDatabaseAccessor databaseAccessor)
+        {
+            
+        }        
     }
 }

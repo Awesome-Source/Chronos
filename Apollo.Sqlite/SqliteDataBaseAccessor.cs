@@ -1,4 +1,5 @@
-﻿using Apollo.Core.Interfaces;
+﻿using System.Transactions;
+using Apollo.Core.Interfaces;
 using Microsoft.Data.Sqlite;
 
 namespace Apollo.Sqlite
@@ -54,7 +55,9 @@ namespace Apollo.Sqlite
 
         public void ExecuteNonQuery(string statement, Dictionary<string, object>? parameters = null)
         {
-            ExecuteInTransaction(withinTransactionExecutor => withinTransactionExecutor.ExecuteNonQuery(statement, parameters));
+            var withinTransactionExecutor = new SqliteWithinTransactionExecutor(_connection, null);
+            withinTransactionExecutor.ExecuteNonQuery(statement, parameters);
+            //ExecuteInTransaction(withinTransactionExecutor => withinTransactionExecutor.ExecuteNonQuery(statement, parameters));
         }
 
         public List<T> ExecuteQuery<T>(string statement, Func<IRowParser, T> parseFunction, Dictionary<string, object>? parameters = null)

@@ -1,6 +1,6 @@
 ﻿namespace Chronos.Views.Dialogs
 {
-    partial class ManageObjectiveDialog
+    partial class ManageCategoryDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,15 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageObjectiveDialog));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageCategoryDialog));
             _labelName = new Label();
-            _labelDescription = new Label();
             _textBoxName = new TextBox();
             _buttonCancel = new Button();
             _buttonOk = new Button();
-            _textBoxDescription = new TextBox();
-            _comboBoxCategory = new ComboBox();
-            _labelCategory = new Label();
             SuspendLayout();
             // 
             // _labelName
@@ -48,16 +44,6 @@
             _labelName.Size = new Size(39, 15);
             _labelName.TabIndex = 1;
             _labelName.Text = "Name";
-            // 
-            // _labelDescription
-            // 
-            _labelDescription.AutoSize = true;
-            _labelDescription.Location = new Point(8, 34);
-            _labelDescription.Margin = new Padding(2, 0, 2, 0);
-            _labelDescription.Name = "_labelDescription";
-            _labelDescription.Size = new Size(67, 15);
-            _labelDescription.TabIndex = 2;
-            _labelDescription.Text = "Description";
             // 
             // _textBoxName
             // 
@@ -71,7 +57,7 @@
             // 
             _buttonCancel.DialogResult = DialogResult.Cancel;
             _buttonCancel.FlatStyle = FlatStyle.Flat;
-            _buttonCancel.Location = new Point(217, 134);
+            _buttonCancel.Location = new Point(229, 75);
             _buttonCancel.Margin = new Padding(2);
             _buttonCancel.Name = "_buttonCancel";
             _buttonCancel.Size = new Size(78, 26);
@@ -83,7 +69,7 @@
             // 
             _buttonOk.DialogResult = DialogResult.OK;
             _buttonOk.FlatStyle = FlatStyle.Flat;
-            _buttonOk.Location = new Point(134, 134);
+            _buttonOk.Location = new Point(146, 75);
             _buttonOk.Margin = new Padding(2);
             _buttonOk.Name = "_buttonOk";
             _buttonOk.Size = new Size(78, 26);
@@ -91,52 +77,20 @@
             _buttonOk.Text = "Ok";
             _buttonOk.UseVisualStyleBackColor = true;
             // 
-            // _textBoxDescription
-            // 
-            _textBoxDescription.Location = new Point(120, 31);
-            _textBoxDescription.Margin = new Padding(2);
-            _textBoxDescription.Name = "_textBoxDescription";
-            _textBoxDescription.Size = new Size(190, 23);
-            _textBoxDescription.TabIndex = 10;
-            // 
-            // _comboBoxCategory
-            // 
-            _comboBoxCategory.BackColor = Color.Silver;
-            _comboBoxCategory.DropDownStyle = ComboBoxStyle.DropDownList;
-            _comboBoxCategory.FormattingEnabled = true;
-            _comboBoxCategory.Location = new Point(120, 59);
-            _comboBoxCategory.Name = "_comboBoxCategory";
-            _comboBoxCategory.Size = new Size(190, 23);
-            _comboBoxCategory.TabIndex = 11;
-            // 
-            // _labelCategory
-            // 
-            _labelCategory.AutoSize = true;
-            _labelCategory.Location = new Point(8, 62);
-            _labelCategory.Margin = new Padding(2, 0, 2, 0);
-            _labelCategory.Name = "_labelCategory";
-            _labelCategory.Size = new Size(55, 15);
-            _labelCategory.TabIndex = 12;
-            _labelCategory.Text = "Category";
-            // 
-            // ManageObjectiveDialog
+            // ManageCategoryDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(318, 171);
-            Controls.Add(_labelCategory);
-            Controls.Add(_comboBoxCategory);
-            Controls.Add(_textBoxDescription);
+            ClientSize = new Size(318, 112);
             Controls.Add(_buttonCancel);
             Controls.Add(_buttonOk);
             Controls.Add(_textBoxName);
-            Controls.Add(_labelDescription);
             Controls.Add(_labelName);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(2);
-            Name = "ManageObjectiveDialog";
-            Text = "Objective";
+            Name = "ManageCategoryDialog";
+            Text = "Category";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -144,12 +98,8 @@
         #endregion
 
         private Label _labelName;
-        private Label _labelDescription;
         private TextBox _textBoxName;
         private Button _buttonCancel;
         private Button _buttonOk;
-        private TextBox _textBoxDescription;
-        private ComboBox _comboBoxCategory;
-        private Label _labelCategory;
     }
 }

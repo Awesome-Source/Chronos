@@ -32,6 +32,7 @@
             _buttonActivities = new Button();
             _buttonObjectives = new Button();
             _panelContent = new Panel();
+            _buttonCategories = new Button();
             SuspendLayout();
             // 
             // _buttonTimeAccounts
@@ -83,6 +84,19 @@
             _panelContent.Size = new Size(962, 418);
             _panelContent.TabIndex = 3;
             // 
+            // _buttonCategories
+            // 
+            _buttonCategories.FlatAppearance.BorderSize = 0;
+            _buttonCategories.FlatStyle = FlatStyle.Flat;
+            _buttonCategories.Location = new Point(373, 2);
+            _buttonCategories.Margin = new Padding(2, 2, 2, 0);
+            _buttonCategories.Name = "_buttonCategories";
+            _buttonCategories.Size = new Size(129, 26);
+            _buttonCategories.TabIndex = 4;
+            _buttonCategories.Text = "Categories";
+            _buttonCategories.UseVisualStyleBackColor = true;
+            _buttonCategories.Click += ButtonCategories_Click;
+            // 
             // MasterDataPage
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -92,6 +106,7 @@
             Controls.Add(_buttonObjectives);
             Controls.Add(_buttonActivities);
             Controls.Add(_buttonTimeAccounts);
+            Controls.Add(_buttonCategories);
             Margin = new Padding(2);
             Name = "MasterDataPage";
             Size = new Size(962, 446);
@@ -104,5 +119,6 @@
         private Button _buttonActivities;
         private Button _buttonObjectives;
         private Panel _panelContent;
+        private Button _buttonCategories;
     }
 }

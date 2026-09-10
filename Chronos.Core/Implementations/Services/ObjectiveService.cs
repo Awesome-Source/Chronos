@@ -13,9 +13,9 @@ namespace Chronos.Core.Implementations.Services
             _objectiveRepository = objectiveRepository;
         }
 
-        public void Create(string name, string description)
+        public void Create(string name, string description, int categoryId)
         {            
-            _objectiveRepository.Add(name, description);
+            _objectiveRepository.Add(name, description, categoryId);
         }
 
         public IReadOnlyList<Objective> GetAll()
@@ -23,9 +23,9 @@ namespace Chronos.Core.Implementations.Services
             return _objectiveRepository.GetValues();
         }
 
-        public void Update(int id, string name, string description)
+        public void Update(int id, string name, string description, int categoryId)
         {
-            _objectiveRepository.Update(id, name, description);
+            _objectiveRepository.Update(id, name, description, categoryId);
         }
 
         public void Remove(int objectiveId)

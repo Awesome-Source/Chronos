@@ -26,6 +26,7 @@ namespace Chronos.WinForms
             serviceCollection.AddTransient<TimeAccountPage>();
             serviceCollection.AddTransient<ActivityPage>();
             serviceCollection.AddTransient<ObjectivePage>();
+            serviceCollection.AddTransient<CategoryPage>();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
             var chronosCore = serviceProvider.GetRequiredService<ChronosCore>();

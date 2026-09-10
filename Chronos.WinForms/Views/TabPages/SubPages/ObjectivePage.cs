@@ -45,7 +45,19 @@ namespace Chronos.Views.TabPages
 
         private void GridActionBar_AddClicked(object sender, EventArgs e)
         {
-            var dialog = new ManageObjectiveDialog();
+            IReadOnlyList<Category> categories;
+
+            try
+            {
+                categories = _chronosCore.CategoryService.GetAll();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve categories.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var dialog = new ManageObjectiveDialog(categories);
             var dialogResult = dialog.ShowDialog(this);
 
             if (dialogResult != DialogResult.OK)
@@ -55,7 +67,7 @@ namespace Chronos.Views.TabPages
 
             try
             {
-                _chronosCore.ObjectiveService.Create(dialog.ObjectiveName, dialog.ObjectiveDescription);
+                _chronosCore.ObjectiveService.Create(dialog.ObjectiveName, dialog.ObjectiveDescription, dialog.CategoryId);
             }
             catch (Exception exception)
             {
@@ -73,9 +85,22 @@ namespace Chronos.Views.TabPages
                 return;
             }
 
-            var dialog = new ManageObjectiveDialog();
+            IReadOnlyList<Category> categories;
+
+            try
+            {
+                categories = _chronosCore.CategoryService.GetAll();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(this, $"Could not retrieve categories.\n\nDetails: {exception}", "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var dialog = new ManageObjectiveDialog(categories);
             dialog.ObjectiveName = objectiveGridEntry.Name;
             dialog.ObjectiveDescription = objectiveGridEntry.Description;
+            dialog.CategoryId = objectiveGridEntry.CategoryId;
 
             var dialogResult = dialog.ShowDialog(this);
 
@@ -86,7 +111,7 @@ namespace Chronos.Views.TabPages
 
             try
             {
-                _chronosCore.ObjectiveService.Update(objectiveGridEntry.Id, dialog.ObjectiveName, dialog.ObjectiveDescription);
+                _chronosCore.ObjectiveService.Update(objectiveGridEntry.Id, dialog.ObjectiveName, dialog.ObjectiveDescription, dialog.CategoryId);
             }
             catch (Exception exception)
             {

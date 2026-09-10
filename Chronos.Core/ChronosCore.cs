@@ -12,14 +12,16 @@ namespace Chronos.Core
         public ITimeAccountService TimeAccountService { get; }
         public IActivityService ActivityService { get; }
         public IObjectiveService ObjectiveService { get; }
+        public ICategoryService CategoryService { get; }
         public ITrackingService TrackingService { get; }
         public IStatisticsService StatisticsService { get; }
 
-        public ChronosCore(ITimeAccountService timeAccountService, IActivityService activityService, IObjectiveService objectiveService, ITrackingService trackingService, IStatisticsService statisticsService, DatabaseInitializer databaseInitializer)
+        public ChronosCore(ITimeAccountService timeAccountService, IActivityService activityService, IObjectiveService objectiveService, ICategoryService categoryService, ITrackingService trackingService, IStatisticsService statisticsService, DatabaseInitializer databaseInitializer)
         {
             TimeAccountService = timeAccountService;
             ActivityService = activityService;
             ObjectiveService = objectiveService;
+            CategoryService = categoryService;
             TrackingService = trackingService;
             StatisticsService = statisticsService;
             _databaseInitializer = databaseInitializer;
@@ -29,7 +31,8 @@ namespace Chronos.Core
         {
             var patches = new List<IDatabasePatch>
             {
-                new InitialPatch()
+                new InitialPatch(),
+                new Patch1Categories()
             };
 
             _databaseInitializer.Run(patches);

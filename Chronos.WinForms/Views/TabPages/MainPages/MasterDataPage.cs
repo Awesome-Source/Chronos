@@ -8,17 +8,18 @@ namespace Chronos.Views.TabPages
     {
         private readonly PageSwitcher<MasterDataPageType> _pageSwitcher;
 
-        public MasterDataPage(TimeAccountPage timeAccountPage, ActivityPage activityPage, ObjectivePage objectivePage)
+        public MasterDataPage(TimeAccountPage timeAccountPage, ActivityPage activityPage, ObjectivePage objectivePage, CategoryPage categoryPage)
         {
             InitializeComponent();
             _pageSwitcher = new PageSwitcher<MasterDataPageType>(_panelContent, highlightButton => highlightButton.BackColor = Color.DarkGray, nonHighlightButton => nonHighlightButton.BackColor = Color.Silver);
 
             var timeAccounts = new List<TimeAccountGridEntry>();
-            
+
 
             _pageSwitcher.RegisterPage(MasterDataPageType.TimeAccounts, timeAccountPage, _buttonTimeAccounts);
             _pageSwitcher.RegisterPage(MasterDataPageType.Activities, activityPage, _buttonActivities);
             _pageSwitcher.RegisterPage(MasterDataPageType.Objectives, objectivePage, _buttonObjectives);
+            _pageSwitcher.RegisterPage(MasterDataPageType.Categories, categoryPage, _buttonCategories);
 
             _pageSwitcher.SetActivePage(MasterDataPageType.TimeAccounts);
         }
@@ -36,6 +37,11 @@ namespace Chronos.Views.TabPages
         private void ButtonObjectives_Click(object sender, EventArgs e)
         {
             _pageSwitcher.SetActivePage(MasterDataPageType.Objectives);
+        }
+
+        private void ButtonCategories_Click(object sender, EventArgs e)
+        {
+            _pageSwitcher.SetActivePage(MasterDataPageType.Categories);
         }
     }
 }

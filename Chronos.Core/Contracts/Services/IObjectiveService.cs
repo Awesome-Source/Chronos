@@ -4,9 +4,9 @@ namespace Chronos.Core.Contracts.Services
 {
     public interface IObjectiveService
     {
-        void Create(string name, string description);
+        void Create(string name, string description, int categoryId);
         IReadOnlyList<Objective> GetAll();
-        void Update(int id, string name, string description);
+        void Update(int id, string name, string description, int categoryId);
         void Remove(int objectiveId);
     }
 }

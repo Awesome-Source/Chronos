@@ -34,6 +34,7 @@ namespace Chronos.Core
             serviceCollection.AddSingleton<ITimeAccountService, TimeAccountService>();
             serviceCollection.AddSingleton<IActivityService, ActivityService>();
             serviceCollection.AddSingleton<IObjectiveService, ObjectiveService>();
+            serviceCollection.AddSingleton<ICategoryService, CategoryService>();
             serviceCollection.AddSingleton<ITrackingService, TrackingService>();
             serviceCollection.AddSingleton<IStatisticsService, StatisticsService>();
         }
@@ -43,6 +44,7 @@ namespace Chronos.Core
             serviceCollection.AddSingleton<ITimeAccountRepository, TimeAccountRepository>();
             serviceCollection.AddSingleton<IActivityRepository, ActivityRepository>();
             serviceCollection.AddSingleton<IObjectiveRepository, ObjectiveRepository>();
+            serviceCollection.AddSingleton<ICategoryRepository, CategoryRepository>();
             serviceCollection.AddSingleton<ITrackingTargetRepository, TrackingTargetRepository>();
             serviceCollection.AddSingleton<ITrackingDayRepository, TrackingDayRepository>();
             serviceCollection.AddSingleton<ITrackingRecordRepository, TrackingRecordRepository>();

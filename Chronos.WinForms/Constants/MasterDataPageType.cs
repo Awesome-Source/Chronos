@@ -4,6 +4,7 @@
     {
         TimeAccounts,
         Activities,
-        Objectives
+        Objectives,
+        Categories
     }
 }
