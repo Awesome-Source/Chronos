@@ -26,7 +26,22 @@ namespace Chronos.Asp
             app.Services.GetRequiredService<ChronosCore>().Initialize();
 
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponseAsync = context =>
+                {
+                    if(app.Environment.IsDevelopment())
+                    {
+                        context.Context.Response.Headers["Cache-Control"] = "No-Store";
+                        return Task.CompletedTask;
+                    }
+
+                    var maxAgeInSeconds = (int) TimeSpan.FromMinutes(5).TotalSeconds;
+                    context.Context.Response.Headers["Cache-Control"] = "public,max-age=" + maxAgeInSeconds;
+
+                    return Task.CompletedTask;
+                }
+            });
 
             app.UseExceptionHandler(ExceptionHandling.Configure);
 

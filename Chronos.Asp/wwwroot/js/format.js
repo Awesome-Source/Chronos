@@ -55,36 +55,11 @@ function formatDuration(totalSeconds) {
   const total = Math.max(0, Math.round(totalSeconds || 0));
   const h = Math.floor(total / 3600);
   const m = Math.floor((total % 3600) / 60);
-  if (h > 0) {
-    return `${h}h ${m}m`;
-  }
-  return `${m}m`;
-}
-
-/** Seconds (number) -> "H:MM:SS" mono-style clock readout. */
-function formatClock(totalSeconds) {
-  const total = Math.max(0, Math.round(totalSeconds || 0));
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
   const s = total % 60;
-  return `${h}:${pad2(m)}:${pad2(s)}`;
-}
-
-function formatHoursShort(totalSeconds) {
-  const hours = (totalSeconds || 0) / 3600;
-  return `${hours.toFixed(1)}h`;
-}
-
-/** "HH:MM:SS" (TimeOnly JSON) -> "9:30 AM" style display. */
-function formatTimeOfDay(hhmmss) {
-  if (!hhmmss) return '--:--';
-  const [hStr, mStr] = hhmmss.split(':');
-  let h = Number(hStr);
-  const m = Number(mStr);
-  const suffix = h >= 12 ? 'PM' : 'AM';
-  h = h % 12;
-  if (h === 0) h = 12;
-  return `${h}:${pad2(m)} ${suffix}`;
+  if (h > 0) {
+      return `${h}h ${m}m ${s}s`;
+  }
+  return `${m}m ${s}s`;
 }
 
 function dayLabelFor(date) {

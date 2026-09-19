@@ -96,7 +96,7 @@ async function renderStatusBar() {
 
     if (active) {
       el.innerHTML = `
-        <div class="sb-left"><span class="pulse-dot"></span> Recording <strong>${escapeHtml(active.activityName)}</strong> &middot; ${escapeHtml(active.objectiveName)}</div>
+        <div class="sb-left"><span class="pulse-dot"></span> Recording <strong>${escapeHtml(active.activityName)}</strong> - ${escapeHtml(active.objectiveName)}</div>
         <div class="sb-right mono">${formatDuration(active.accumulatedTime)}</div>
       `;
     } else {
