@@ -98,8 +98,8 @@ let newTargetDropdowns = null;
 function getNewTargetDropdowns() {
   if (!newTargetDropdowns) {
     const activityColumns = [
-      { label: 'Activity', value: (a) => a.name },
-      { label: 'Time account', value: (a) => timeAccountById(a.timeAccountId)?.name },
+        { label: 'Time account', value: (a) => timeAccountById(a.timeAccountId)?.name },
+        { label: 'Activity', value: (a) => a.name },
     ];
     newTargetDropdowns = {
       existingActivity: new TableDropdown('na-activity', activityColumns),

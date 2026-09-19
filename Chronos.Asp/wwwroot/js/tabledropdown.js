@@ -82,8 +82,8 @@ class TableDropdown {
   }
 
   updateTrigger() {
-    const row = this.rows.find((r) => r.id === this.selectedId);
-    this.trigger.textContent = row ? String(this.columns[0].value(row) ?? '') : 'No entries';
+      const row = this.rows.find((r) => r.id === this.selectedId);
+      this.trigger.textContent = row ? String(this.columns.map(c => "" + c.value(row)).join(" / ") ?? '') : 'No entries';
   }
 
   open() {

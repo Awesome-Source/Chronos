@@ -31,7 +31,7 @@ namespace Chronos.Core.Implementations.Database.Patches
                                             name TEXT NOT NULL
                                         ) STRICT;");
 
-            withinTransactionExecutor.ExecuteNonQuery("INSERT INTO categories (name) VALUES ('')");
+            withinTransactionExecutor.ExecuteNonQuery("INSERT INTO categories (name) VALUES ('-')");
         }
 
         private void ExtendExistingTablesWithCategories(IWithinTransactionExecutor withinTransactionExecutor)

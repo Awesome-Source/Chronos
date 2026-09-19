@@ -206,8 +206,8 @@ function getNewRecordDropdowns() {
         { label: 'Accumulated', value: (t) => formatDuration(t.accumulatedTime) },
       ]),
       activity: new TableDropdown('nr-activity', [
-        { label: 'Activity', value: (a) => a.name },
-        { label: 'Time account', value: (a) => timeAccountById(a.timeAccountId)?.name },
+          { label: 'Time account', value: (a) => timeAccountById(a.timeAccountId)?.name },
+          { label: 'Activity', value: (a) => a.name },
       ]),
       objective: new TableDropdown('nr-objective', [
         { label: 'Name', value: (o) => o.name },
