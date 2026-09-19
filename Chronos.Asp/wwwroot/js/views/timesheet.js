@@ -1,6 +1,6 @@
 /* Time Sheet: daily summary/report for a completed (past) day.
    Defaults to the most recent day with tracking data before today; only
-   reports on past days, matching the WinForms business rule. */
+   reports on past days. */
 
 async function renderTimesheet() {
   const page = document.getElementById('page-timesheet');

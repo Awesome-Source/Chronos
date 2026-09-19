@@ -1,5 +1,5 @@
 # Chronos
-Chronos is a small WinForms program to track the time spent on different activities during the day.
+Chronos is a small web application to track the time spent on different activities during the day.
 	
 # Status of common programming aspects
 - Tests: Planned
@@ -14,5 +14,6 @@ Chronos is a small WinForms program to track the time spent on different activit
 - Complete active records on day change
 - Exception handling
 - Logging
-- Hide time accounts / activities / objectives that are no longer needed
 - Backup before DB update
+- Improve dashboard
+- Implement statistics

@@ -1,5 +1,5 @@
 /* Orchestrator: navigation, modal/toast helpers, master-data cache refresh, startup, and
-   the 10-second poll that mirrors Chronos.WinForms' TrackingPage timer. */
+   the 10-second poll TrackingPage timer. */
 
 const PAGES = [
   { key: 'dashboard', label: 'Dashboard', icon: 'dashboard' },

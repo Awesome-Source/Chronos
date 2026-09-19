@@ -1,6 +1,3 @@
-/* Dashboard: the only real WinForms feature here is the all-time productive
-   Time Account balance table, plus the app-wide "currently tracking" concept. */
-
 async function renderDashboard() {
   const page = document.getElementById('page-dashboard');
   page.innerHTML = `

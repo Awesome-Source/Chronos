@@ -1,6 +1,5 @@
 /* Records: view/edit raw start-end tracking records for a chosen day.
-   Add/Remove are not implemented here, mirroring Chronos.WinForms (those actions
-   are stubbed "Not implemented yet." there and Chronos.Core exposes no delete). */
+   Add/Remove are not implemented yet. */
 
 async function renderRecords() {
   const page = document.getElementById('page-records');

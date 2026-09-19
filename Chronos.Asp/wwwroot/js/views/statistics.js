@@ -1,7 +1,3 @@
-/* Statistics: in Chronos.WinForms this page is an unimplemented placeholder
-   (7 static labels describing planned-but-unbuilt reports). Replicated as-is,
-   with exact wording from Chronos.WinForms/Views/TabPages/MainPages/StatisticsPage.Designer.cs. */
-
 const STATISTICS_PLACEHOLDER_ITEMS = [
   'Percentage per Time Account (ever)',
   'Percentage per Time Account (last year)',
