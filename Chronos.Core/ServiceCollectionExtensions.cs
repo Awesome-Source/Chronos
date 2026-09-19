@@ -12,7 +12,7 @@ namespace Chronos.Core
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddChronosCore(this ServiceCollection serviceCollection, string appDataDirectory)
+        public static void AddChronosCore(this IServiceCollection serviceCollection, string appDataDirectory)
         {
             RegisterDatabaseServices(serviceCollection, appDataDirectory);
             RegisterRepositories(serviceCollection);
@@ -21,7 +21,7 @@ namespace Chronos.Core
             serviceCollection.AddSingleton<ChronosCore>();
         }
 
-        private static void RegisterDatabaseServices(ServiceCollection serviceCollection, string appDataDirectory)
+        private static void RegisterDatabaseServices(IServiceCollection serviceCollection, string appDataDirectory)
         {
             serviceCollection.AddTransient<IDatabaseAccessor, SqliteDataBaseAccessor>();
             serviceCollection.AddSingleton<IPatchInfoRepository, PatchInfoRepository>();
@@ -29,7 +29,7 @@ namespace Chronos.Core
             serviceCollection.AddSingleton<DatabaseInitializer>();
         }
 
-        private static void RegisterServices(ServiceCollection serviceCollection)
+        private static void RegisterServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<ITimeAccountService, TimeAccountService>();
             serviceCollection.AddSingleton<IActivityService, ActivityService>();
@@ -39,7 +39,7 @@ namespace Chronos.Core
             serviceCollection.AddSingleton<IStatisticsService, StatisticsService>();
         }
 
-        private static void RegisterRepositories(ServiceCollection serviceCollection)
+        private static void RegisterRepositories(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<ITimeAccountRepository, TimeAccountRepository>();
             serviceCollection.AddSingleton<IActivityRepository, ActivityRepository>();

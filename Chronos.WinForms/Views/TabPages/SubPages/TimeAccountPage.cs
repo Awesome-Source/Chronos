@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Drawing;
 using Chronos.Core;
 using Chronos.Core.Contracts.DataObjects;
 using Chronos.Views.Dialogs;
@@ -55,7 +56,7 @@ namespace Chronos.Views.TabPages
 
             try
             {
-                _chronosCore.TimeAccountService.Create(dialog.TimeAccountName, dialog.TimeAccountColor, dialog.TimeAccountWorktime);
+                _chronosCore.TimeAccountService.Create(dialog.TimeAccountName, ColorTranslator.ToHtml(dialog.TimeAccountColor), dialog.TimeAccountWorktime);
             }
             catch (Exception exception)
             {
@@ -86,7 +87,7 @@ namespace Chronos.Views.TabPages
 
             try
             {
-                _chronosCore.TimeAccountService.Update(timeAccount.Id, dialog.TimeAccountName, dialog.TimeAccountColor, dialog.TimeAccountWorktime);
+                _chronosCore.TimeAccountService.Update(timeAccount.Id, dialog.TimeAccountName, ColorTranslator.ToHtml(dialog.TimeAccountColor), dialog.TimeAccountWorktime);
             }
             catch (Exception exception)
             {

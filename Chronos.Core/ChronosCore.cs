@@ -32,7 +32,8 @@ namespace Chronos.Core
             var patches = new List<IDatabasePatch>
             {
                 new InitialPatch(),
-                new Patch1Categories()
+                new Patch1Categories(),
+                new Patch2DropActivityCategoryId()
             };
 
             _databaseInitializer.Run(patches);

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Drawing;
 using Chronos.Core.Contracts.DataObjects;
 using Chronos.WinForms.Attributes;
 using Chronos.WinForms.Views.Common;
@@ -20,7 +21,7 @@ namespace Chronos.WinForms.DataObjects
         {
             Id = timeAccount.Id;
             Name = timeAccount.Name;
-            Color = timeAccount.Color;
+            Color = ColorTranslator.FromHtml(timeAccount.Color);
             IsWorkTime = timeAccount.IsWorkTime;
         }
 

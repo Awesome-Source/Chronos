@@ -1,15 +1,13 @@
-﻿using System.Drawing;
-
-namespace Chronos.Core.Contracts.DataObjects
+﻿namespace Chronos.Core.Contracts.DataObjects
 {
     public class TimeAccount
     {
         public int Id { get; }
         public string Name { get; set; }
-        public Color Color { get; set; }
+        public string Color { get; set; }
         public bool IsWorkTime { get; set; }
 
-        public TimeAccount(int internalId, string name, Color color, bool isWorkTime)
+        public TimeAccount(int internalId, string name, string color, bool isWorkTime)
         {
             Id = internalId;
             Name = name;

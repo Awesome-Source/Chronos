@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Apollo.Core.Interfaces;
+﻿using Apollo.Core.Interfaces;
 using Chronos.Core.Contracts.DataObjects;
 using Chronos.Core.Contracts.Repositories;
 using Chronos.Core.Extensions;
@@ -15,12 +14,12 @@ namespace Chronos.Core.Implementations.Repositories
             _databaseAccessor = databaseAccessor;
         }
 
-        public int Add(string name, Color color, bool isWorkTime)
+        public int Add(string name, string colorHex, bool isWorkTime)
         {
             var parameters = new Dictionary<string, object>
             {
                 {"NAME", name },
-                {"COLOR", color.ToHexRepresentation() },
+                {"COLOR", colorHex },
                 {"WORKTIME", isWorkTime.ToIntRepresentation() },
             };
 
@@ -34,7 +33,7 @@ namespace Chronos.Core.Implementations.Repositories
 
         private static TimeAccount ParseTimeAccount(IRowParser rowParser)
         {
-            return new TimeAccount(rowParser.GetInt("id"), rowParser.GetString("name"), rowParser.GetString("color").ToColorFromHexRepresentation(), rowParser.GetInt("is_worktime").ToBoolFromIntRepresentation());
+            return new TimeAccount(rowParser.GetInt("id"), rowParser.GetString("name"), rowParser.GetString("color"), rowParser.GetInt("is_worktime").ToBoolFromIntRepresentation());
         }
 
         public void Remove(int id)
@@ -47,13 +46,13 @@ namespace Chronos.Core.Implementations.Repositories
             _databaseAccessor.ExecuteNonQuery("DELETE FROM time_accounts WHERE id = @ID", parameters);
         }
 
-        public void Update(int id, string name, Color color, bool isWorkTime)
+        public void Update(int id, string name, string colorHex, bool isWorkTime)
         {
             var parameters = new Dictionary<string, object>
             {
                 {"ID", id },
                 {"NAME", name },
-                {"COLOR", color.ToHexRepresentation() },
+                {"COLOR", colorHex },
                 {"WORKTIME", isWorkTime.ToIntRepresentation() },
             };
 
