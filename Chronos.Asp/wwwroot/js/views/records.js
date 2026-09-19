@@ -124,8 +124,8 @@ function renderRecordsRows(records) {
     const isConflicted = Boolean(conflict.before || conflict.after);
     return `
     <tr class="${r.isActive ? 'row-active' : ''} ${isConflicted ? 'row-conflict' : ''}">
-      <td><input type="time" class="mono" value="${timeOnlyStringToTimeInput(r.start)}" ${r.isActive ? 'disabled' : `onchange="updateRecordTime(${r.id})" data-record="${r.id}" data-field="start"`}></td>
-      <td>${r.isActive ? '<span class="mono">--:--</span>' : `<input type="time" class="mono" value="${timeOnlyStringToTimeInput(r.end)}" onchange="updateRecordTime(${r.id})" data-record="${r.id}" data-field="end">`}</td>
+      <td><input type="time" step="1" class="mono" value="${timeOnlyStringToTimeInput(r.start)}" ${r.isActive ? 'disabled' : `onchange="updateRecordTime(${r.id})" data-record="${r.id}" data-field="start"`}></td>
+      <td>${r.isActive ? '<span class="mono">--:--:--</span>' : `<input type="time" step="1" class="mono" value="${timeOnlyStringToTimeInput(r.end)}" onchange="updateRecordTime(${r.id})" data-record="${r.id}" data-field="end">`}</td>
       <td class="num mono">${r.isActive ? '&mdash;' : formatDuration(r.duration)}</td>
       <td>${escapeHtml(r.activityName)}</td>
       <td>${escapeHtml(r.objectiveName)}</td>
@@ -219,16 +219,16 @@ function getNewRecordDropdowns() {
   return newRecordDropdowns;
 }
 
-/** "HH:MM" plus one hour, clamped to 23:59. */
-function addHourToTimeInput(hhmm) {
-  const [hours, minutes] = hhmm.split(':').map(Number);
-  return hours >= 23 ? '23:59' : `${pad2(hours + 1)}:${pad2(minutes)}`;
+/** "HH:MM:SS" plus one hour, clamped to 23:59:59. */
+function addHourToTimeInput(hhmmss) {
+  const [hours, minutes, seconds = 0] = hhmmss.split(':').map(Number);
+  return hours >= 23 ? '23:59:59' : `${pad2(hours + 1)}:${pad2(minutes)}:${pad2(seconds)}`;
 }
 
 /** Suggested start for a new record: the end of the latest completed record shown, else 08:00. */
 function suggestedRecordStart() {
   const ends = displayedRecords.filter((r) => !r.isActive).map((r) => r.end);
-  if (!ends.length) return '08:00';
+  if (!ends.length) return '08:00:00';
   return timeOnlyStringToTimeInput(ends.reduce((latest, end) => (end > latest ? end : latest)));
 }
 

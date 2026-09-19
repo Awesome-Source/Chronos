@@ -35,14 +35,14 @@ function inputValueToDate(value) {
   return new Date(y, m - 1, d);
 }
 
-/** <input type="time"> gives "HH:MM"; the API's TimeOnly JSON wants "HH:MM:SS". */
-function timeInputToTimeOnlyString(hhmm) {
-  return hhmm.length === 5 ? hhmm + ':00' : hhmm;
+/** <input type="time" step="1"> gives "HH:MM:SS" ("HH:MM" when the seconds are 0); the API's TimeOnly JSON wants "HH:MM:SS". */
+function timeInputToTimeOnlyString(value) {
+  return value.length === 5 ? value + ':00' : value;
 }
 
-/** API's TimeOnly JSON ("HH:MM:SS") -> value usable in <input type="time">. */
+/** API's TimeOnly JSON ("HH:MM:SS") -> value usable in <input type="time" step="1">. */
 function timeOnlyStringToTimeInput(hhmmss) {
-  return hhmmss ? hhmmss.slice(0, 5) : '00:00';
+  return hhmmss ? hhmmss.slice(0, 8) : '00:00:00';
 }
 
 function nowAsTimeOnlyString() {
