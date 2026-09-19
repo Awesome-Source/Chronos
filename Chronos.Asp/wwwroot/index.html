@@ -39,7 +39,7 @@
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<div class="modal" id="modal-new-tracking-target">
+<div class="modal modal-wide" id="modal-new-tracking-target">
   <div class="modal-head"><h2>New tracking target</h2><button class="btn-ghost row-icon-btn" onclick="closeModals()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="modal-body">
     <div class="tabs">
@@ -48,12 +48,12 @@
     </div>
     <div class="tab-panel" id="nt-existing">
       <div class="field">
-        <label for="na-activity">Activity</label>
-        <select id="na-activity"></select>
+        <label for="na-activity-trigger">Activity</label>
+        <div id="na-activity"></div>
       </div>
       <div class="field">
-        <label for="na-objective">Objective</label>
-        <select id="na-objective"></select>
+        <label for="na-objective-trigger">Objective</label>
+        <div id="na-objective"></div>
       </div>
       <div class="field-check">
         <input type="checkbox" id="na-planned">
@@ -62,8 +62,8 @@
     </div>
     <div class="tab-panel" id="nt-new">
       <div class="field">
-        <label for="nn-activity">Activity</label>
-        <select id="nn-activity"></select>
+        <label for="nn-activity-trigger">Activity</label>
+        <div id="nn-activity"></div>
       </div>
       <div class="field">
         <label for="nn-name">Objective name</label>
@@ -93,6 +93,7 @@
 
 <script src="js/icons.js"></script>
 <script src="js/format.js"></script>
+<script src="js/tabledropdown.js"></script>
 <script src="js/state.js"></script>
 <script src="js/api.js"></script>
 <script src="js/views/dashboard.js"></script>

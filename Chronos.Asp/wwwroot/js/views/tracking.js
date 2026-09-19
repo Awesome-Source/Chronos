@@ -92,6 +92,28 @@ async function stopTracking() {
   }
 }
 
+let newTargetDropdowns = null;
+
+/** Creates the modal's table dropdowns on first use (they render their own markup into the hosts). */
+function getNewTargetDropdowns() {
+  if (!newTargetDropdowns) {
+    const activityColumns = [
+      { label: 'Activity', value: (a) => a.name },
+      { label: 'Time account', value: (a) => timeAccountById(a.timeAccountId)?.name },
+    ];
+    newTargetDropdowns = {
+      existingActivity: new TableDropdown('na-activity', activityColumns),
+      newActivity: new TableDropdown('nn-activity', activityColumns),
+      objective: new TableDropdown('na-objective', [
+        { label: 'Name', value: (o) => o.name },
+        { label: 'Description', value: (o) => o.description },
+        { label: 'Category', value: (o) => cache.categories.find((c) => c.id === o.categoryId)?.name },
+      ]),
+    };
+  }
+  return newTargetDropdowns;
+}
+
 function openNewTrackingTargetModal() {
   const availableObjectives = cache.objectives.filter((o) => !o.isDone);
 
@@ -100,10 +122,10 @@ function openNewTrackingTargetModal() {
     return;
   }
 
-  const activityOptions = cache.activities.map((a) => `<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('');
-  document.getElementById('na-activity').innerHTML = activityOptions;
-  document.getElementById('nn-activity').innerHTML = activityOptions;
-  document.getElementById('na-objective').innerHTML = availableObjectives.map((o) => `<option value="${o.id}">${escapeHtml(o.name)}</option>`).join('');
+  const dropdowns = getNewTargetDropdowns();
+  dropdowns.existingActivity.setRows(cache.activities);
+  dropdowns.newActivity.setRows(cache.activities);
+  dropdowns.objective.setRows(availableObjectives);
   document.getElementById('nn-category').innerHTML = cache.categories.map((c) => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
   document.getElementById('na-planned').checked = false;
   document.getElementById('nn-planned').checked = false;
@@ -141,20 +163,20 @@ async function submitNewTrackingTarget() {
         return;
       }
 
-      activityId = Number(document.getElementById('nn-activity').value);
+      activityId = Number(getNewTargetDropdowns().newActivity.value);
       isPlannedActivity = document.getElementById('nn-planned').checked;
       ({ id: objectiveId } = await Api.createObjective({ name, description, categoryId }));
       await refreshMasterDataCache();
     } else {
-      const objectiveValue = document.getElementById('na-objective').value;
+      const { existingActivity, objective } = getNewTargetDropdowns();
 
-      if (!objectiveValue) {
+      if (objective.value === null) {
         toast('Select an objective, or create a new one.', 'error');
         return;
       }
 
-      activityId = Number(document.getElementById('na-activity').value);
-      objectiveId = Number(objectiveValue);
+      activityId = Number(existingActivity.value);
+      objectiveId = Number(objective.value);
       isPlannedActivity = document.getElementById('na-planned').checked;
     }
 

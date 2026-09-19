@@ -367,6 +367,8 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--primary-strong);}
   z-index:41;
 }
 .modal.open{display:block;}
+/* wider modal whose dropdown panels may extend past its edges instead of scrolling inside it */
+.modal.modal-wide{width:680px;overflow:visible;}
 .modal-head{
   display:flex;align-items:center;justify-content:space-between;
   padding:16px 18px;
@@ -379,6 +381,54 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--primary-strong);}
   padding:14px 18px;
   border-top:1px solid var(--border);
 }
+
+/* ---------- table dropdown (see js/tabledropdown.js) ---------- */
+.td{position:relative;}
+.td-trigger{
+  width:100%;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--surface-2);
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius-sm);
+  color:var(--text);
+  padding:8px 10px;
+  text-align:left;
+  cursor:pointer;
+  outline:none;
+}
+.td-trigger::after{
+  content:'';
+  flex:0 0 auto;
+  width:6px;height:6px;
+  border:solid var(--text-muted);
+  border-width:0 1.5px 1.5px 0;
+  transform:translateY(-2px) rotate(45deg);
+}
+.td-trigger:focus,.td.open .td-trigger{border-color:var(--primary-strong);}
+.td-panel{
+  position:absolute;
+  left:0;right:0;
+  top:calc(100% + 4px);
+  z-index:5;
+  display:none;
+  background:var(--surface);
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius);
+  box-shadow:0 14px 34px rgba(0,0,0,0.45);
+  overflow:hidden;
+}
+.td.open .td-panel{display:block;}
+.td.up .td-panel{top:auto;bottom:calc(100% + 4px);}
+.td-filter{margin:8px;width:calc(100% - 16px);}
+.td-scroll{max-height:240px;overflow:auto;border-top:1px solid var(--border);}
+.td-panel table.data-table th{
+  position:sticky;top:0;
+  background:var(--surface-2);
+  padding:8px 10px;
+}
+.td-panel table.data-table td{padding:8px 10px;}
+.td-panel table.data-table tbody tr[data-index]{cursor:pointer;}
+.td-panel table.data-table tbody tr.td-active{background:var(--surface-hover);}
 
 /* ---------- toasts ---------- */
 .toast-container{
