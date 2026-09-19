@@ -13,10 +13,11 @@ namespace Chronos.Asp.Contracts
     public record CreateCategoryRequest(string Name);
     public record UpdateCategoryRequest(string Name);
 
-    public record CreateTrackingTargetRequest(int ActivityId, int ObjectiveId, bool IsPlannedActivity);
+    public record CreateTrackingTargetRequest(int ActivityId, int ObjectiveId, bool IsPlannedActivity, DateOnly? Date = null);
     public record CreateTrackingTargetResponse(int Id);
     public record StartTrackingRequest(TimeOnly Start);
     public record StopTrackingRequest(TimeOnly End);
+    public record CreateTrackingRecordRequest(int TrackingTargetId, TimeOnly Start, TimeOnly End);
     public record UpdateTrackingRecordRequest(TimeOnly Start, TimeOnly End);
     public record LatestTrackingDayResponse(DateOnly Date);
 }

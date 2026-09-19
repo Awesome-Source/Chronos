@@ -10,7 +10,10 @@ namespace Chronos.Core.Contracts.Services
         void StopTracking(TimeOnly end);
         IReadOnlyList<TrackingRecord> GetRecordsForDay(DateOnly date);
         IReadOnlyList<EvaluatedTrackingTarget> GetTimeSheetForDay(DateOnly date);
+        IReadOnlyList<EvaluatedTrackingTarget> GetTrackingTargetsForDay(DateOnly date);
+        void AddRecord(int trackingTargetId, TimeOnly start, TimeOnly end);
         void UpdateRecord(int recordId, TimeOnly start, TimeOnly end);
+        void RemoveRecord(int recordId);
         void CompleteActiveEntryInPastIfExisting(DateOnly date);
         bool TryGetLatestTrackingDayBefore(DateOnly date, out DateOnly latestDateBefore);
     }

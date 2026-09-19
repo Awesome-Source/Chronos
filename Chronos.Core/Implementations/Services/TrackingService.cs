@@ -66,9 +66,34 @@ namespace Chronos.Core.Implementations.Services
             _trackingRecordRepository.CompleteActiveRecord(end);
         }
 
+        public IReadOnlyList<EvaluatedTrackingTarget> GetTrackingTargetsForDay(DateOnly date)
+        {
+            if (!_trackingDayRepository.TryGetTrackingDay(date, out var trackingDayId))
+            {
+                return new List<EvaluatedTrackingTarget>();
+            }
+
+            return _trackingTargetRepository.GetEvaluatedTrackingTargetsForDay(trackingDayId);
+        }
+
+        public void AddRecord(int trackingTargetId, TimeOnly start, TimeOnly end)
+        {
+            if (end <= start)
+            {
+                throw new ArgumentException("End must be after start.");
+            }
+
+            _trackingRecordRepository.AddRecord(trackingTargetId, start, end);
+        }
+
         public void UpdateRecord(int recordId, TimeOnly start, TimeOnly end)
         {
             _trackingRecordRepository.UpdateRecord(recordId, start, end);
+        }
+
+        public void RemoveRecord(int recordId)
+        {
+            _trackingRecordRepository.DeleteRecord(recordId);
         }
 
         public void CompleteActiveEntryInPastIfExisting(DateOnly date)

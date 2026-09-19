@@ -22,11 +22,17 @@ namespace Chronos.Asp.Controllers
             return Ok(_trackingService.GetEvaluatedTrackingTargetsForDay(DateTime.Now));
         }
 
+        [HttpGet("targets")]
+        public ActionResult<IReadOnlyList<EvaluatedTrackingTarget>> GetTrackingTargetsForDay([FromQuery] DateOnly date)
+        {
+            return Ok(_trackingService.GetTrackingTargetsForDay(date));
+        }
+
         [HttpPost("targets")]
         public ActionResult<CreateTrackingTargetResponse> CreateTarget([FromBody] CreateTrackingTargetRequest request)
         {
-            var today = DateOnly.FromDateTime(DateTime.Now);
-            var id = _trackingService.CreateTarget(today, request.ActivityId, request.ObjectiveId, request.IsPlannedActivity);
+            var date = request.Date ?? DateOnly.FromDateTime(DateTime.Now);
+            var id = _trackingService.CreateTarget(date, request.ActivityId, request.ObjectiveId, request.IsPlannedActivity);
             return Ok(new CreateTrackingTargetResponse(id));
         }
 
@@ -50,10 +56,24 @@ namespace Chronos.Asp.Controllers
             return Ok(_trackingService.GetRecordsForDay(date));
         }
 
+        [HttpPost("records")]
+        public IActionResult AddRecord([FromBody] CreateTrackingRecordRequest request)
+        {
+            _trackingService.AddRecord(request.TrackingTargetId, request.Start, request.End);
+            return NoContent();
+        }
+
         [HttpPut("records/{id:int}")]
         public IActionResult UpdateRecord(int id, [FromBody] UpdateTrackingRecordRequest request)
         {
             _trackingService.UpdateRecord(id, request.Start, request.End);
+            return NoContent();
+        }
+
+        [HttpDelete("records/{id:int}")]
+        public IActionResult RemoveRecord(int id)
+        {
+            _trackingService.RemoveRecord(id);
             return NoContent();
         }
 

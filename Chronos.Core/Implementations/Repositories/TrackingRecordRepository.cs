@@ -123,10 +123,10 @@ namespace Chronos.Core.Implementations.Repositories
             };
 
             var sql = @"SELECT 
-                            tr.id,
-                            tr.start_time, 
-                            tr.end_time, 
-                            tr.duration,
+                            tr.id AS id,
+                            tr.start_time AS start_time, 
+                            tr.end_time AS end_time, 
+                            tr.duration AS duration,
                             a.id AS activity_id,
                             a.name AS activity_name,
                             o.id AS objective_id,
@@ -139,10 +139,10 @@ namespace Chronos.Core.Implementations.Repositories
                         WHERE tt.tracking_day_id = @DAY_ID
                         UNION ALL
                         SELECT 
-                            atr.id,
-                            atr.start_time, 
-                            0, 
-                            0,
+                            atr.id AS id,
+                            atr.start_time  AS start_time, 
+                            0 AS end_time, 
+                            0 AS duration,
                             aa.id AS activity_id,
                             aa.name AS activity_name,
                             ao.id AS objective_id,
@@ -152,7 +152,8 @@ namespace Chronos.Core.Implementations.Repositories
                         INNER JOIN tracking_targets att ON atr.tracking_target_id = att.id
                         INNER JOIN activities aa ON att.activity_id = aa.id 
                         INNER JOIN objectives ao ON att.objective_id = ao.id
-                        WHERE att.tracking_day_id = @DAY_ID";
+                        WHERE att.tracking_day_id = @DAY_ID
+                        ORDER BY start_time, end_time, id";
 
             return _databaseAccessor.ExecuteQuery(sql, ParseRecords, parameters);
         }
@@ -183,6 +184,29 @@ namespace Chronos.Core.Implementations.Repositories
             };
 
             _databaseAccessor.ExecuteNonQuery("UPDATE tracking_records SET start_time = @START, end_time = @END, duration = @DURATION WHERE id = @ID", parameters);
+        }
+
+        public void AddRecord(int targetId, TimeOnly start, TimeOnly end)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"TARGET_ID", targetId },
+                {"START", start.ToSecondsSinceMidnight() },
+                {"END", end.ToSecondsSinceMidnight() },
+                {"DURATION", (int) (end - start).TotalSeconds }
+            };
+
+            _databaseAccessor.ExecuteNonQuery("INSERT INTO tracking_records (tracking_target_id, start_time, end_time, duration) VALUES (@TARGET_ID, @START, @END, @DURATION)", parameters);
+        }
+
+        public void DeleteRecord(int recordId)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"ID", recordId }
+            };
+
+            _databaseAccessor.ExecuteNonQuery("DELETE FROM tracking_records WHERE id = @ID", parameters);
         }
 
         public void CompleteActiveEntryInPastIfExisting(int currentTrackingDayId)

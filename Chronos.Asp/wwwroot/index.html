@@ -89,6 +89,50 @@
   </div>
 </div>
 
+<div class="modal modal-wide" id="modal-new-record">
+  <div class="modal-head"><h2>Add record</h2><button class="btn-ghost row-icon-btn" onclick="closeModals()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="modal-body">
+    <div class="field-row">
+      <div class="field">
+        <label for="nr-start">Start</label>
+        <input type="time" id="nr-start">
+      </div>
+      <div class="field">
+        <label for="nr-end">End</label>
+        <input type="time" id="nr-end">
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn" data-nr-tab="existing" onclick="setNewRecordTab('existing')">Existing tracking target</button>
+      <button class="tab-btn" data-nr-tab="new" onclick="setNewRecordTab('new')">New tracking target</button>
+    </div>
+    <div class="tab-panel" id="nr-existing">
+      <div class="field">
+        <label for="nr-target-trigger">Tracking target</label>
+        <div id="nr-target"></div>
+      </div>
+    </div>
+    <div class="tab-panel" id="nr-new">
+      <div class="field">
+        <label for="nr-activity-trigger">Activity</label>
+        <div id="nr-activity"></div>
+      </div>
+      <div class="field">
+        <label for="nr-objective-trigger">Objective</label>
+        <div id="nr-objective"></div>
+      </div>
+      <div class="field-check">
+        <input type="checkbox" id="nr-planned">
+        <label for="nr-planned">This work is planned</label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-outline" onclick="closeModals()">Cancel</button>
+    <button class="btn btn-primary" onclick="submitNewRecord()">Add record</button>
+  </div>
+</div>
+
 <div class="toast-container" id="toast-container"></div>
 
 <script src="js/icons.js"></script>

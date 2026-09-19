@@ -238,6 +238,8 @@ table.data-table td{
 table.data-table tbody tr:hover{background:var(--surface-hover);}
 table.data-table tbody tr:last-child td{border-bottom:none;}
 table.data-table tr.row-active{background:var(--accent-soft);}
+table.data-table tr.row-conflict{background:var(--danger-soft);}
+table.data-table tr.row-conflict td:first-child{box-shadow:inset 3px 0 0 var(--danger);}
 table.data-table tr.row-selected td:first-child{box-shadow:inset 3px 0 0 var(--primary-strong);}
 table.data-table td.num,table.data-table th.num{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
 table.data-table td.empty-state{color:var(--text-muted);text-align:center;padding:26px 10px;}
@@ -253,6 +255,7 @@ table.data-table td.empty-state{color:var(--text-muted);text-align:center;paddin
 }
 .badge-planned{background:var(--primary-soft);border-color:var(--primary-soft-border);color:var(--primary-strong);}
 .badge-unplanned{background:var(--surface-2);border-color:var(--border-strong);color:var(--text-secondary);}
+.badge-conflict{background:var(--danger-soft);border-color:var(--danger);color:#ffd8cf;}
 
 /* ---------- time account color swatches ---------- */
 .ta-dot{display:inline-flex;align-items:center;gap:8px;}
@@ -270,6 +273,8 @@ table.data-table td.empty-state{color:var(--text-muted);text-align:center;paddin
 .row-icon-btn svg{width:15px;height:15px;}
 .row-icon-btn:hover{background:var(--surface-hover);color:var(--text);}
 .row-icon-btn.danger:hover{background:var(--danger-soft);color:var(--danger);}
+.row-icon-btn:disabled{opacity:.35;cursor:not-allowed;}
+.row-icon-btn:disabled:hover{background:transparent;color:var(--text-secondary);}
 
 /* ---------- buttons ---------- */
 .btn{

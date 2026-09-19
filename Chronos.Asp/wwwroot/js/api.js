@@ -60,11 +60,14 @@ const Api = {
 
   // Tracking
   getTodaysTargets: () => apiRequest('GET', '/tracking/targets/today'),
+  getTrackingTargetsForDay: (dateStr) => apiRequest('GET', `/tracking/targets?date=${dateStr}`),
   createTrackingTarget: (req) => apiRequest('POST', '/tracking/targets', req),
   startTracking: (targetId, start) => apiRequest('POST', `/tracking/targets/${targetId}/start`, { start }),
   stopTracking: (end) => apiRequest('POST', '/tracking/stop', { end }),
   getRecordsForDay: (dateStr) => apiRequest('GET', `/tracking/records?date=${dateStr}`),
+  createRecord: (req) => apiRequest('POST', '/tracking/records', req),
   updateRecord: (id, start, end) => apiRequest('PUT', `/tracking/records/${id}`, { start, end }),
+  removeRecord: (id) => apiRequest('DELETE', `/tracking/records/${id}`),
   getTimeSheetForDay: (dateStr) => apiRequest('GET', `/tracking/timesheet?date=${dateStr}`),
   getLatestDayBefore: async (dateStr) => {
     const res = await fetch(`${API_BASE}/tracking/latest-day-before?date=${dateStr}`);
