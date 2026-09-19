@@ -23,10 +23,10 @@ namespace Chronos.Asp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateObjectiveRequest request)
+        public ActionResult<CreateObjectiveResponse> Create([FromBody] CreateObjectiveRequest request)
         {
-            _objectiveService.Create(request.Name, request.Description, request.CategoryId);
-            return NoContent();
+            var id = _objectiveService.Create(request.Name, request.Description, request.CategoryId);
+            return Ok(new CreateObjectiveResponse(id));
         }
 
         [HttpPut("{id:int}")]

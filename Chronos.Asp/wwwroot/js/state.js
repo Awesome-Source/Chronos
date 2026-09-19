@@ -6,6 +6,7 @@ let selectedTargetId = null;
 let recordsSelectedDate = TODAY;
 let timesheetSelectedDate = null;
 let masterTab = 'accounts';
+let newTargetTab = 'existing';
 
 /** Shared lookup cache for master data, populated at startup and refreshed after any mutation. */
 const cache = {

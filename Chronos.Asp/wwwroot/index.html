@@ -39,25 +39,53 @@
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<div class="modal" id="modal-new-activity">
-  <div class="modal-head"><h2>New activity</h2><button class="btn-ghost row-icon-btn" onclick="closeModals()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+<div class="modal" id="modal-new-tracking-target">
+  <div class="modal-head"><h2>New tracking target</h2><button class="btn-ghost row-icon-btn" onclick="closeModals()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="modal-body">
-    <div class="field">
-      <label for="na-activity">Activity</label>
-      <select id="na-activity"></select>
+    <div class="tabs">
+      <button class="tab-btn" data-nt-tab="existing" onclick="setNewTargetTab('existing')">Existing objective</button>
+      <button class="tab-btn" data-nt-tab="new" onclick="setNewTargetTab('new')">New objective</button>
     </div>
-    <div class="field">
-      <label for="na-objective">Objective</label>
-      <select id="na-objective"></select>
+    <div class="tab-panel" id="nt-existing">
+      <div class="field">
+        <label for="na-activity">Activity</label>
+        <select id="na-activity"></select>
+      </div>
+      <div class="field">
+        <label for="na-objective">Objective</label>
+        <select id="na-objective"></select>
+      </div>
+      <div class="field-check">
+        <input type="checkbox" id="na-planned">
+        <label for="na-planned">This work is planned</label>
+      </div>
     </div>
-    <div class="field-check">
-      <input type="checkbox" id="na-planned">
-      <label for="na-planned">This work is planned</label>
+    <div class="tab-panel" id="nt-new">
+      <div class="field">
+        <label for="nn-activity">Activity</label>
+        <select id="nn-activity"></select>
+      </div>
+      <div class="field">
+        <label for="nn-name">Objective name</label>
+        <input type="text" id="nn-name">
+      </div>
+      <div class="field">
+        <label for="nn-description">Description</label>
+        <textarea id="nn-description"></textarea>
+      </div>
+      <div class="field">
+        <label for="nn-category">Category</label>
+        <select id="nn-category"></select>
+      </div>
+      <div class="field-check">
+        <input type="checkbox" id="nn-planned">
+        <label for="nn-planned">This work is planned</label>
+      </div>
     </div>
   </div>
   <div class="modal-actions">
     <button class="btn btn-outline" onclick="closeModals()">Cancel</button>
-    <button class="btn btn-primary" onclick="submitNewActivity()">Add to today</button>
+    <button class="btn btn-primary" onclick="submitNewTrackingTarget()">Add to today</button>
   </div>
 </div>
 

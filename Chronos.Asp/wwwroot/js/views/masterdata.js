@@ -155,8 +155,9 @@ function renderMasterData() {
 
 function setMasterTab(tab) {
   masterTab = tab;
-  document.querySelectorAll('.tab-btn').forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === tab));
-  document.querySelectorAll('.tab-panel').forEach((panel) => panel.classList.toggle('active', panel.id === `tab-${tab}`));
+  const page = document.getElementById('page-masterdata');
+  page.querySelectorAll('.tab-btn').forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === tab));
+  page.querySelectorAll('.tab-panel').forEach((panel) => panel.classList.toggle('active', panel.id === `tab-${tab}`));
 
   if (tab === 'accounts') renderTimeAccountsTab();
   else if (tab === 'activities') renderActivitiesTab();

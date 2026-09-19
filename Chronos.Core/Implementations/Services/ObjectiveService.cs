@@ -13,9 +13,9 @@ namespace Chronos.Core.Implementations.Services
             _objectiveRepository = objectiveRepository;
         }
 
-        public void Create(string name, string description, int categoryId)
-        {            
-            _objectiveRepository.Add(name, description, categoryId);
+        public int Create(string name, string description, int categoryId)
+        {
+            return _objectiveRepository.Add(name, description, categoryId);
         }
 
         public IReadOnlyList<Objective> GetAll()

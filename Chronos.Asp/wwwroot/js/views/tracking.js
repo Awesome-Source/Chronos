@@ -6,7 +6,7 @@ async function renderTracking() {
   const page = document.getElementById('page-tracking');
   page.innerHTML = `
     <div class="page-head">
-      <div><h1>Tracking</h1><span class="sub">Today's activity targets</span></div>
+      <div><h1>Tracking</h1><span class="sub">Today's tracking targets</span></div>
       <div class="page-head-actions">
         <span class="card-sub">Total time: <strong class="mono" id="tracking-total">0m</strong></span>
       </div>
@@ -18,7 +18,7 @@ async function renderTracking() {
       </table>
       <div class="toolbar">
         <button class="btn btn-primary" id="tracking-start" disabled onclick="startSelected()">${ICONS.play} Start selected</button>
-        <button class="btn btn-outline" onclick="openNewActivityModal()">${ICONS.plus} New activity</button>
+        <button class="btn btn-outline" onclick="openNewTrackingTargetModal()">${ICONS.plus} New tracking target</button>
         <button class="btn btn-danger" onclick="stopTracking()">${ICONS.stop} Stop tracking</button>
       </div>
     </div>
@@ -46,7 +46,7 @@ function renderTrackingRows(targets) {
   if (!body) return;
 
   if (!targets.length) {
-    body.innerHTML = `<tr><td class="empty-state" colspan="5">No activity targets for today yet. Use "New activity" to start one.</td></tr>`;
+    body.innerHTML = `<tr><td class="empty-state" colspan="5">No activity targets for today yet. Use "New tracking target" to start one.</td></tr>`;
   } else {
     body.innerHTML = targets.map((t) => `
       <tr class="${t.isActive ? 'row-active' : ''} ${selectedTargetId === t.internalId ? 'row-selected' : ''}" style="cursor:pointer" onclick="selectTarget(${t.internalId})">
@@ -92,28 +92,72 @@ async function stopTracking() {
   }
 }
 
-function openNewActivityModal() {
-  const activitySelect = document.getElementById('na-activity');
-  const objectiveSelect = document.getElementById('na-objective');
+function openNewTrackingTargetModal() {
   const availableObjectives = cache.objectives.filter((o) => !o.isDone);
 
-  if (!cache.activities.length || !availableObjectives.length) {
-    toast('Add at least one Activity and an open (not-done) Objective in Master Data first.', 'error');
+  if (!cache.activities.length) {
+    toast('Add at least one Activity in Master Data first.', 'error');
     return;
   }
 
-  activitySelect.innerHTML = cache.activities.map((a) => `<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('');
-  objectiveSelect.innerHTML = availableObjectives.map((o) => `<option value="${o.id}">${escapeHtml(o.name)}</option>`).join('');
+  const activityOptions = cache.activities.map((a) => `<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('');
+  document.getElementById('na-activity').innerHTML = activityOptions;
+  document.getElementById('nn-activity').innerHTML = activityOptions;
+  document.getElementById('na-objective').innerHTML = availableObjectives.map((o) => `<option value="${o.id}">${escapeHtml(o.name)}</option>`).join('');
+  document.getElementById('nn-category').innerHTML = cache.categories.map((c) => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
   document.getElementById('na-planned').checked = false;
-  openModal('modal-new-activity');
+  document.getElementById('nn-planned').checked = false;
+  document.getElementById('nn-name').value = '';
+  document.getElementById('nn-description').value = '';
+
+  setNewTargetTab(availableObjectives.length ? 'existing' : 'new');
+    openModal('modal-new-tracking-target');
 }
 
-async function submitNewActivity() {
-  const activityId = Number(document.getElementById('na-activity').value);
-  const objectiveId = Number(document.getElementById('na-objective').value);
-  const isPlannedActivity = document.getElementById('na-planned').checked;
+function setNewTargetTab(tab) {
+  newTargetTab = tab;
+  const modal = document.getElementById('modal-new-tracking-target');
+  modal.querySelectorAll('.tab-btn').forEach((btn) => btn.classList.toggle('active', btn.dataset.ntTab === tab));
+  modal.querySelectorAll('.tab-panel').forEach((panel) => panel.classList.toggle('active', panel.id === `nt-${tab}`));
+}
 
+async function submitNewTrackingTarget() {
   try {
+    let activityId;
+    let objectiveId;
+    let isPlannedActivity;
+
+    if (newTargetTab === 'new') {
+      const name = document.getElementById('nn-name').value.trim();
+      const description = document.getElementById('nn-description').value.trim();
+      const categoryId = Number(document.getElementById('nn-category').value);
+
+      if (!cache.categories.length) {
+        toast('Add a category first.', 'error');
+        return;
+      }
+      if (!name) {
+        toast('Enter a name for the objective.', 'error');
+        return;
+      }
+
+      activityId = Number(document.getElementById('nn-activity').value);
+      isPlannedActivity = document.getElementById('nn-planned').checked;
+      ({ id: objectiveId } = await Api.createObjective({ name, description, categoryId }));
+      await refreshMasterDataCache();
+    } else {
+      const objectiveValue = document.getElementById('na-objective').value;
+
+      if (!objectiveValue) {
+        toast('Select an objective, or create a new one.', 'error');
+        return;
+      }
+
+      activityId = Number(document.getElementById('na-activity').value);
+      objectiveId = Number(objectiveValue);
+      isPlannedActivity = document.getElementById('na-planned').checked;
+    }
+
     const { id } = await Api.createTrackingTarget({ activityId, objectiveId, isPlannedActivity });
     await Api.startTracking(id, nowAsTimeOnlyString());
     closeModals();
