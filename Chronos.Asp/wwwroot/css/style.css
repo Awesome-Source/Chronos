@@ -204,6 +204,32 @@ table.data-table th{
   padding:0 10px 10px;
   border-bottom:1px solid var(--border-strong);
 }
+/* sortable headers + filter row (Master Data) */
+table.data-table thead tr:has(+ tr.filter-row) th{padding-bottom:6px;border-bottom:none;}
+table.data-table tr.filter-row th{
+  font-weight:400;
+  text-transform:none;
+  letter-spacing:0;
+  padding:0 10px 10px;
+}
+.sort-btn{
+  background:none;
+  border:none;
+  padding:0;
+  font:inherit;
+  color:inherit;
+  text-transform:inherit;
+  letter-spacing:inherit;
+  cursor:pointer;
+}
+.sort-btn:hover{color:var(--text);}
+.sort-btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:var(--radius-sm);}
+th[aria-sort=ascending] .sort-btn,th[aria-sort=descending] .sort-btn{color:var(--text);}
+th[aria-sort=ascending] .sort-btn::after{content:' \25B2';font-size:9px;}
+th[aria-sort=descending] .sort-btn::after{content:' \25BC';font-size:9px;}
+input.filter-input{padding:5px 7px;font-size:12.5px;}
+input.filter-input::placeholder{color:var(--text-muted);}
+
 table.data-table td{
   padding:11px 10px;
   border-bottom:1px solid var(--border);

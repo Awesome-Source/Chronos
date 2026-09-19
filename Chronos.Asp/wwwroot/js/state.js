@@ -15,6 +15,16 @@ const cache = {
   categories: [],
 };
 
+/** Per-table sort/filter state for the Master Data tables (frontend-only, survives tab switches).
+    sort: { key, dir: 'asc' | 'desc' } | null.
+    filters[key]: string for text columns, true/false for checkbox columns; absent = no filter. */
+const masterView = {
+  accounts: { sort: null, filters: {} },
+  activities: { sort: null, filters: {} },
+  objectives: { sort: null, filters: {} },
+  categories: { sort: null, filters: {} },
+};
+
 function timeAccountById(id) {
   return cache.timeAccounts.find((a) => a.id === id);
 }

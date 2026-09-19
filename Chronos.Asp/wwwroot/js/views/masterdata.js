@@ -3,6 +3,136 @@
    Delete failures (FK violations from the server) surface as an error toast instead
    of a client-side pre-check, since the server is now authoritative. */
 
+/* ---------- Sorting & filtering (frontend only) ----------
+   Every table has clickable sort headers and a filter row. Only <tbody> is re-rendered on
+   sort/filter changes, so the filter inputs in <thead> keep focus while typing. State lives in
+   masterView (state.js) and is applied to a copy of the cache right before rows are rendered. */
+
+const MASTER_TABLES = {
+  accounts: {
+    columns: [
+      { key: 'color', label: 'Color', type: 'color', value: (r) => r.color },
+      { key: 'name', label: 'Name', type: 'text', value: (r) => r.name },
+      { key: 'isWorkTime', label: 'Work time', type: 'bool', value: (r) => r.isWorkTime },
+    ],
+    renderRows: () => renderTimeAccountsRows(),
+  },
+  activities: {
+    columns: [
+      { key: 'name', label: 'Name', type: 'text', value: (r) => r.name },
+      { key: 'timeAccount', label: 'Time account', type: 'text', value: (r) => timeAccountById(r.timeAccountId)?.name },
+    ],
+    renderRows: () => renderActivitiesRows(),
+  },
+  objectives: {
+    columns: [
+      { key: 'name', label: 'Name', type: 'text', value: (r) => r.name },
+      { key: 'description', label: 'Description', type: 'text', value: (r) => r.description },
+      { key: 'category', label: 'Category', type: 'text', value: (r) => cache.categories.find((c) => c.id === r.categoryId)?.name },
+      { key: 'isDone', label: 'Done', type: 'bool', value: (r) => r.isDone },
+    ],
+    renderRows: () => renderObjectivesRows(),
+  },
+  categories: {
+    columns: [
+      { key: 'name', label: 'Name', type: 'text', value: (r) => r.name },
+    ],
+    renderRows: () => renderCategoriesRows(),
+  },
+};
+
+/** Two-row <thead>: clickable sort headers, then the filter row (color columns get no filter). */
+function masterTableHead(table) {
+  const { columns } = MASTER_TABLES[table];
+  const { sort, filters } = masterView[table];
+
+  const headCells = columns.map((c) => {
+    const ariaSort = sort && sort.key === c.key ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none';
+    return `<th data-key="${c.key}" aria-sort="${ariaSort}"><button type="button" class="sort-btn" onclick="setMasterSort('${table}', '${c.key}')">${c.label}</button></th>`;
+  }).join('');
+
+  const filterCells = columns.map((c) => {
+    if (c.type === 'color') return '<th></th>';
+    if (c.type === 'bool') {
+      const state = filters[c.key] ?? null;
+      return `<th><input type="checkbox" class="tri-filter" data-tri="${state}" title="Filter: any / yes / no" onclick="cycleMasterBoolFilter('${table}', '${c.key}', this)"></th>`;
+    }
+    return `<th><input type="text" class="filter-input" placeholder="Filter…" value="${escapeHtml(filters[c.key] ?? '')}" oninput="setMasterFilter('${table}', '${c.key}', this.value)"></th>`;
+  }).join('');
+
+  return `<thead><tr>${headCells}<th></th></tr><tr class="filter-row">${filterCells}<th></th></tr></thead>`;
+}
+
+/** Applies indeterminate/checked to the tri-state filter checkboxes (not settable via HTML attributes). */
+function initMasterTriStates(panel) {
+  panel.querySelectorAll('input[data-tri]').forEach((el) => {
+    setTriState(el, el.dataset.tri === 'true' ? true : el.dataset.tri === 'false' ? false : null);
+  });
+}
+
+function setTriState(el, value) {
+  el.indeterminate = value === null;
+  el.checked = value === true;
+}
+
+function compareMasterValues(a, b, type) {
+  if (type === 'bool') return Number(Boolean(a)) - Number(Boolean(b));
+  return String(a ?? '').localeCompare(String(b ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+}
+
+/** Returns the rows matching the table's filters, ordered by its sort. Never mutates the input. */
+function applyMasterView(table, rows) {
+  const { columns } = MASTER_TABLES[table];
+  const { sort, filters } = masterView[table];
+
+  const result = rows.filter((row) => columns.every((c) => {
+    const filter = filters[c.key];
+    if (filter === undefined || c.type === 'color') return true;
+    if (c.type === 'bool') return Boolean(c.value(row)) === filter;
+    return String(c.value(row) ?? '').toLowerCase().includes(filter.trim().toLowerCase());
+  }));
+
+  if (sort) {
+    const column = columns.find((c) => c.key === sort.key);
+    const direction = sort.dir === 'asc' ? 1 : -1;
+    result.sort((a, b) => direction * compareMasterValues(column.value(a), column.value(b), column.type));
+  }
+  return result;
+}
+
+/** Header click: ascending, then descending, then unsorted. */
+function setMasterSort(table, key) {
+  const view = masterView[table];
+  if (!view.sort || view.sort.key !== key) view.sort = { key, dir: 'asc' };
+  else if (view.sort.dir === 'asc') view.sort = { key, dir: 'desc' };
+  else view.sort = null;
+
+  document.querySelectorAll(`#tab-${table} thead th[data-key]`).forEach((th) => {
+    const active = view.sort && view.sort.key === th.dataset.key;
+    th.setAttribute('aria-sort', active ? (view.sort.dir === 'asc' ? 'ascending' : 'descending') : 'none');
+  });
+  MASTER_TABLES[table].renderRows();
+}
+
+function setMasterFilter(table, key, value) {
+  const { filters } = masterView[table];
+  if (value === '') delete filters[key];
+  else filters[key] = value;
+  MASTER_TABLES[table].renderRows();
+}
+
+/** Tri-state checkbox filter: any (indeterminate) -> yes (checked) -> no (unchecked) -> any. */
+function cycleMasterBoolFilter(table, key, el) {
+  const { filters } = masterView[table];
+  const current = filters[key] ?? null;
+  const next = current === null ? true : current === true ? false : null;
+
+  if (next === null) delete filters[key];
+  else filters[key] = next;
+  setTriState(el, next);
+  MASTER_TABLES[table].renderRows();
+}
+
 function renderMasterData() {
   const page = document.getElementById('page-masterdata');
   page.innerHTML = `
@@ -41,7 +171,7 @@ function renderTimeAccountsTab() {
   panel.innerHTML = `
     <div class="panel">
       <table class="data-table">
-        <thead><tr><th>Color</th><th>Name</th><th>Work time</th><th></th></tr></thead>
+        ${masterTableHead('accounts')}
         <tbody id="ta-body"></tbody>
       </table>
       <div class="toolbar">
@@ -49,6 +179,7 @@ function renderTimeAccountsTab() {
       </div>
     </div>
   `;
+  initMasterTriStates(panel);
   renderTimeAccountsRows();
 }
 
@@ -61,7 +192,13 @@ function renderTimeAccountsRows() {
     return;
   }
 
-  body.innerHTML = cache.timeAccounts.map((a) => `
+  const rows = applyMasterView('accounts', cache.timeAccounts);
+  if (!rows.length) {
+    body.innerHTML = `<tr><td class="empty-state" colspan="4">No matching rows.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = rows.map((a) => `
     <tr>
       <td><input type="color" value="${a.color}" onchange="updateTimeAccountField(${a.id}, 'colorHex', this.value)"></td>
       <td><input class="name-input" type="text" value="${escapeHtml(a.name)}" onchange="updateTimeAccountField(${a.id}, 'name', this.value)"></td>
@@ -120,7 +257,7 @@ function renderActivitiesTab() {
   panel.innerHTML = `
     <div class="panel">
       <table class="data-table">
-        <thead><tr><th>Name</th><th>Time account</th><th></th></tr></thead>
+        ${masterTableHead('activities')}
         <tbody id="act-body"></tbody>
       </table>
       <div class="toolbar">
@@ -128,6 +265,7 @@ function renderActivitiesTab() {
       </div>
     </div>
   `;
+  initMasterTriStates(panel);
   renderActivitiesRows();
 }
 
@@ -144,7 +282,13 @@ function renderActivitiesRows() {
     return;
   }
 
-  body.innerHTML = cache.activities.map((a) => `
+  const rows = applyMasterView('activities', cache.activities);
+  if (!rows.length) {
+    body.innerHTML = `<tr><td class="empty-state" colspan="3">No matching rows.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = rows.map((a) => `
     <tr>
       <td><input class="name-input" type="text" value="${escapeHtml(a.name)}" onchange="updateActivityField(${a.id}, 'name', this.value)"></td>
       <td>
@@ -209,7 +353,7 @@ function renderObjectivesTab() {
   panel.innerHTML = `
     <div class="panel">
       <table class="data-table">
-        <thead><tr><th>Name</th><th>Description</th><th>Category</th><th>Done</th><th></th></tr></thead>
+        ${masterTableHead('objectives')}
         <tbody id="obj-body"></tbody>
       </table>
       <div class="toolbar">
@@ -217,6 +361,7 @@ function renderObjectivesTab() {
       </div>
     </div>
   `;
+  initMasterTriStates(panel);
   renderObjectivesRows();
 }
 
@@ -233,7 +378,13 @@ function renderObjectivesRows() {
     return;
   }
 
-  body.innerHTML = cache.objectives.map((o) => `
+  const rows = applyMasterView('objectives', cache.objectives);
+  if (!rows.length) {
+    body.innerHTML = `<tr><td class="empty-state" colspan="5">No matching rows.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = rows.map((o) => `
     <tr>
       <td><input class="name-input" type="text" value="${escapeHtml(o.name)}" onchange="updateObjectiveField(${o.id}, 'name', this.value)"></td>
       <td><input class="name-input" type="text" value="${escapeHtml(o.description)}" onchange="updateObjectiveField(${o.id}, 'description', this.value)"></td>
@@ -302,7 +453,7 @@ function renderCategoriesTab() {
   panel.innerHTML = `
     <div class="panel">
       <table class="data-table">
-        <thead><tr><th>Name</th><th></th></tr></thead>
+        ${masterTableHead('categories')}
         <tbody id="cat-body"></tbody>
       </table>
       <div class="toolbar">
@@ -310,6 +461,7 @@ function renderCategoriesTab() {
       </div>
     </div>
   `;
+  initMasterTriStates(panel);
   renderCategoriesRows();
 }
 
@@ -322,7 +474,13 @@ function renderCategoriesRows() {
     return;
   }
 
-  body.innerHTML = cache.categories.map((c) => `
+  const rows = applyMasterView('categories', cache.categories);
+  if (!rows.length) {
+    body.innerHTML = `<tr><td class="empty-state" colspan="2">No matching rows.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = rows.map((c) => `
     <tr>
       <td><input class="name-input" type="text" value="${escapeHtml(c.name)}" onchange="updateCategoryField(${c.id}, this.value)"></td>
       <td><button class="row-icon-btn danger" onclick="deleteCategory(${c.id})">${ICONS.trash}</button></td>
