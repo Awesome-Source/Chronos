@@ -23,9 +23,9 @@ namespace Chronos.Core.Implementations.Services
             return _objectiveRepository.GetValues();
         }
 
-        public void Update(int id, string name, string description, int categoryId)
+        public void Update(int id, string name, string description, int categoryId, bool isDone)
         {
-            _objectiveRepository.Update(id, name, description, categoryId);
+            _objectiveRepository.Update(id, name, description, categoryId, isDone);
         }
 
         public void Remove(int objectiveId)

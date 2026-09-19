@@ -209,7 +209,7 @@ function renderObjectivesTab() {
   panel.innerHTML = `
     <div class="panel">
       <table class="data-table">
-        <thead><tr><th>Name</th><th>Description</th><th>Category</th><th></th></tr></thead>
+        <thead><tr><th>Name</th><th>Description</th><th>Category</th><th>Done</th><th></th></tr></thead>
         <tbody id="obj-body"></tbody>
       </table>
       <div class="toolbar">
@@ -225,11 +225,11 @@ function renderObjectivesRows() {
   if (!body) return;
 
   if (!cache.categories.length) {
-    body.innerHTML = `<tr><td class="empty-state" colspan="4">Add a category first.</td></tr>`;
+    body.innerHTML = `<tr><td class="empty-state" colspan="5">Add a category first.</td></tr>`;
     return;
   }
   if (!cache.objectives.length) {
-    body.innerHTML = `<tr><td class="empty-state" colspan="4">No objectives yet.</td></tr>`;
+    body.innerHTML = `<tr><td class="empty-state" colspan="5">No objectives yet.</td></tr>`;
     return;
   }
 
@@ -242,6 +242,7 @@ function renderObjectivesRows() {
           ${cache.categories.map((c) => `<option value="${c.id}" ${c.id === o.categoryId ? 'selected' : ''}>${escapeHtml(c.name)}</option>`).join('')}
         </select>
       </td>
+      <td><input type="checkbox" ${o.isDone ? 'checked' : ''} onchange="updateObjectiveField(${o.id}, 'isDone', this.checked)"></td>
       <td><button class="row-icon-btn danger" onclick="deleteObjective(${o.id})">${ICONS.trash}</button></td>
     </tr>
   `).join('');
@@ -255,6 +256,7 @@ async function updateObjectiveField(id, field, value) {
     name: field === 'name' ? value : objective.name,
     description: field === 'description' ? value : objective.description,
     categoryId: field === 'categoryId' ? value : objective.categoryId,
+    isDone: field === 'isDone' ? value : objective.isDone,
   };
 
   try {

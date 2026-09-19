@@ -95,14 +95,15 @@ async function stopTracking() {
 function openNewActivityModal() {
   const activitySelect = document.getElementById('na-activity');
   const objectiveSelect = document.getElementById('na-objective');
+  const availableObjectives = cache.objectives.filter((o) => !o.isDone);
 
-  if (!cache.activities.length || !cache.objectives.length) {
-    toast('Add at least one Activity and Objective in Master Data first.', 'error');
+  if (!cache.activities.length || !availableObjectives.length) {
+    toast('Add at least one Activity and an open (not-done) Objective in Master Data first.', 'error');
     return;
   }
 
   activitySelect.innerHTML = cache.activities.map((a) => `<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('');
-  objectiveSelect.innerHTML = cache.objectives.map((o) => `<option value="${o.id}">${escapeHtml(o.name)}</option>`).join('');
+  objectiveSelect.innerHTML = availableObjectives.map((o) => `<option value="${o.id}">${escapeHtml(o.name)}</option>`).join('');
   document.getElementById('na-planned').checked = false;
   openModal('modal-new-activity');
 }

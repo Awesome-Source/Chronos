@@ -7,7 +7,7 @@ namespace Chronos.Asp.Contracts
     public record UpdateActivityRequest(string Name, int TimeAccountId);
 
     public record CreateObjectiveRequest(string Name, string Description, int CategoryId);
-    public record UpdateObjectiveRequest(string Name, string Description, int CategoryId);
+    public record UpdateObjectiveRequest(string Name, string Description, int CategoryId, bool IsDone);
 
     public record CreateCategoryRequest(string Name);
     public record UpdateCategoryRequest(string Name);

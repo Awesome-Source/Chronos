@@ -33,7 +33,8 @@ namespace Chronos.Core
             {
                 new InitialPatch(),
                 new Patch1Categories(),
-                new Patch2DropActivityCategoryId()
+                new Patch2DropActivityCategoryId(),
+                new Patch3ObjectiveIsDone()
             };
 
             _databaseInitializer.Run(patches);

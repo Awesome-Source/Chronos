@@ -1,6 +1,7 @@
 ﻿using Apollo.Core.Interfaces;
 using Chronos.Core.Contracts.DataObjects;
 using Chronos.Core.Contracts.Repositories;
+using Chronos.Core.Extensions;
 
 namespace Chronos.Core.Implementations.Repositories
 {
@@ -27,12 +28,12 @@ namespace Chronos.Core.Implementations.Repositories
 
         public IReadOnlyList<Objective> GetValues()
         {
-            return _databaseAccessor.ExecuteQuery("SELECT o.id, o.name, o.description, c.name AS category_name, c.id AS category_id FROM objectives o INNER JOIN categories c ON o.category_id = c.id", ParseObjectives);
+            return _databaseAccessor.ExecuteQuery("SELECT o.id, o.name, o.description, c.name AS category_name, c.id AS category_id, o.is_done FROM objectives o INNER JOIN categories c ON o.category_id = c.id", ParseObjectives);
         }
 
         private Objective ParseObjectives(IRowParser parser)
         {
-            return new Objective(parser.GetInt("id"), parser.GetString("name"), parser.GetString("description"), parser.GetString("category_name"), parser.GetInt("category_id"));
+            return new Objective(parser.GetInt("id"), parser.GetString("name"), parser.GetString("description"), parser.GetString("category_name"), parser.GetInt("category_id"), parser.GetInt("is_done").ToBoolFromIntRepresentation());
         }
 
         public void Remove(int id)
@@ -45,17 +46,18 @@ namespace Chronos.Core.Implementations.Repositories
             _databaseAccessor.ExecuteNonQuery("DELETE FROM objectives WHERE id = @ID", parameters);
         }
 
-        public void Update(int id, string name, string description, int categoryId)
+        public void Update(int id, string name, string description, int categoryId, bool isDone)
         {
             var parameters = new Dictionary<string, object>
             {
                 {"ID", id },
                 {"NAME", name },
                 {"DESCRIPTION", description },
-                {"CATEGORY", categoryId}
+                {"CATEGORY", categoryId},
+                {"DONE", isDone.ToIntRepresentation() },
             };
 
-            _databaseAccessor.ExecuteNonQuery("UPDATE objectives SET name = @NAME, description = @DESCRIPTION, category_id = @CATEGORY WHERE id = @ID", parameters);
+            _databaseAccessor.ExecuteNonQuery("UPDATE objectives SET name = @NAME, description = @DESCRIPTION, category_id = @CATEGORY, is_done = @DONE WHERE id = @ID", parameters);
         }
     }
 }

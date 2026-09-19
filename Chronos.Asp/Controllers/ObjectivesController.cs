@@ -32,7 +32,7 @@ namespace Chronos.Asp.Controllers
         [HttpPut("{id:int}")]
         public IActionResult Update(int id, [FromBody] UpdateObjectiveRequest request)
         {
-            _objectiveService.Update(id, request.Name, request.Description, request.CategoryId);
+            _objectiveService.Update(id, request.Name, request.Description, request.CategoryId, request.IsDone);
             return NoContent();
         }
 
