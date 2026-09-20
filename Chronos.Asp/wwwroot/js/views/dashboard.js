@@ -15,10 +15,7 @@ async function renderDashboard() {
   const page = document.getElementById('page-dashboard');
   page.innerHTML = `
     <div class="page-head">
-      <div><h1>Dashboard</h1><span class="sub">Accumulated durations per productive Time Account</span></div>
-    </div>
-    <div class="cards-row single">
-      <div class="card" id="dashboard-current"></div>
+      <div><h1>Dashboard</h1></div>
     </div>
     <div class="grid-2">
       ${productivePanelHtml('dashboard-all-time', 'Productive time by account (all time)')}
@@ -31,17 +28,15 @@ async function renderDashboard() {
   `;
 
   try {
-    const [balances, weekBalances, weekDays, targets] = await Promise.all([
+    const [balances, weekBalances, weekDays] = await Promise.all([
       Api.getStatisticsBalances(),
       Api.getStatisticsBalancesCurrentWeek(),
       Api.getStatisticsDailyDurationsCurrentWeek(),
-      Api.getTodaysTargets(),
     ]);
 
     renderProductivePanel('dashboard-all-time', balances, 'No tracked time yet.');
     renderProductivePanel('dashboard-week', weekBalances, 'No tracked time this week yet.');
     renderDashboardWeekDays(weekDays);
-    renderDashboardCurrent(targets);
   } catch (err) {
     toast(err.message, 'error');
   }
@@ -80,24 +75,4 @@ function renderDashboardWeekDays(days) {
   if (!el) return;
 
   el.innerHTML = stackedBarChartHtml(days);
-}
-
-function renderDashboardCurrent(targets) {
-  const el = document.getElementById('dashboard-current');
-  if (!el) return;
-
-  const active = targets.find((t) => t.isActive);
-  if (active) {
-    el.innerHTML = `
-      <div class="card-label">Currently tracking</div>
-      <div class="card-value accent mono">${formatDuration(active.accumulatedTime)}</div>
-      <div class="card-sub">${escapeHtml(active.activityName)} &middot; ${escapeHtml(active.objectiveName)}</div>
-    `;
-  } else {
-    el.innerHTML = `
-      <div class="card-label">Currently tracking</div>
-      <div class="card-value mono">--</div>
-      <div class="card-sub">Not tracking right now</div>
-    `;
-  }
 }

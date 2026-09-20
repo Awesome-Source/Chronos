@@ -53,7 +53,7 @@ namespace Chronos.Core.Implementations.Repositories
                         INNER JOIN tracking_days td ON tt.tracking_day_id = td.id
                         INNER JOIN activities a ON tt.activity_id = a.id
                         INNER JOIN time_accounts ta ON a.time_account_id = ta.id
-                        WHERE (td.year * 10000 + td.month * 100 + td.day) > @FROM AND (td.year * 10000 + td.month * 100 + td.day) < @TO
+                        WHERE (td.year * 10000 + td.month * 100 + td.day) BETWEEN @FROM AND @TO
                         GROUP BY td.year, td.month, td.day, ta.id, ta.name, ta.is_worktime";
 
             return _databaseAccessor.ExecuteQuery(sql, ParseDailyTimeAccountDuration, parameters);
