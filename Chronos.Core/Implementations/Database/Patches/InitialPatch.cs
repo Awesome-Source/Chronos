@@ -94,12 +94,12 @@ namespace Chronos.Core.Implementations.Database.Patches
                                         ) STRICT;");
         }
 
-        public void BeforeExecution(IDatabaseAccessor databaseAccessor)
+        public void BeforeExecution(IConnectionExecutor connectionExecutor)
         {
 
         }
 
-        public void AfterExecution(IDatabaseAccessor databaseAccessor)
+        public void AfterExecution(IConnectionExecutor connectionExecutor)
         {
             
         }        

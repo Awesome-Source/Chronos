@@ -117,13 +117,22 @@ namespace Apollo.Core
             try
             {
                 Console.WriteLine($"Trying to install patch [{patch.GetType().FullName}]");
-                patch.BeforeExecution(_databaseAccessor);
-                _databaseAccessor.ExecuteInTransaction(withinTransactionExecutor =>
+                _databaseAccessor.ExecuteOnSingleConnection(connectionExecutor =>
                 {
-                    patch.Execute(withinTransactionExecutor);
-                    _patchInfoRepository.RegisterPatchInstallation(withinTransactionExecutor, patch.PatchMetaInfo);
+                    patch.BeforeExecution(connectionExecutor);
+                    try
+                    {
+                        connectionExecutor.ExecuteInTransaction(withinTransactionExecutor =>
+                        {
+                            patch.Execute(withinTransactionExecutor);
+                            _patchInfoRepository.RegisterPatchInstallation(withinTransactionExecutor, patch.PatchMetaInfo);
+                        });
+                    }
+                    finally
+                    {
+                        patch.AfterExecution(connectionExecutor);
+                    }
                 });
-                patch.AfterExecution(_databaseAccessor);
 
                 Console.WriteLine($"Successfully installed patch {patch.PatchMetaInfo.PatchNumber}");
             }

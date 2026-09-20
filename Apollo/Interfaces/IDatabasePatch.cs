@@ -6,9 +6,9 @@ namespace Apollo.Core.Interfaces
     {
         PatchMetaInfo PatchMetaInfo { get; }
 
-        void AfterExecution(IDatabaseAccessor databaseAccessor);
+        void AfterExecution(IConnectionExecutor connectionExecutor);
         void Execute(IWithinTransactionExecutor withinTransactionExecutor);
-        void BeforeExecution(IDatabaseAccessor databaseAccessor);
+        void BeforeExecution(IConnectionExecutor connectionExecutor);
         
     }
 }

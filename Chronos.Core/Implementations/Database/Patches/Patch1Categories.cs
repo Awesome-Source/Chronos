@@ -8,9 +8,9 @@ namespace Chronos.Core.Implementations.Database.Patches
     {
         public PatchMetaInfo PatchMetaInfo => new PatchMetaInfo(1, "Added categories");
 
-        public void BeforeExecution(IDatabaseAccessor databaseAccessor)
+        public void BeforeExecution(IConnectionExecutor connectionExecutor)
         {
-            databaseAccessor.ExecuteNonQuery("PRAGMA FOREIGN_KEYS = OFF");
+            connectionExecutor.ExecuteNonQuery("PRAGMA FOREIGN_KEYS = OFF");
         }        
 
         public void Execute(IWithinTransactionExecutor withinTransactionExecutor)
@@ -19,9 +19,9 @@ namespace Chronos.Core.Implementations.Database.Patches
             ExtendExistingTablesWithCategories(withinTransactionExecutor);
         }
 
-        public void AfterExecution(IDatabaseAccessor databaseAccessor)
+        public void AfterExecution(IConnectionExecutor connectionExecutor)
         {
-            databaseAccessor.ExecuteNonQuery("PRAGMA FOREIGN_KEYS = ON");
+            connectionExecutor.ExecuteNonQuery("PRAGMA FOREIGN_KEYS = ON");
         }
 
         private void CreateCategoriesTable(IWithinTransactionExecutor withinTransactionExecutor)

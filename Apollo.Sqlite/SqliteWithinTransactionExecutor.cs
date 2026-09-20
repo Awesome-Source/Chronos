@@ -5,10 +5,10 @@ namespace Apollo.Sqlite
 {
     public class SqliteWithinTransactionExecutor : IWithinTransactionExecutor
     {
-        private readonly SqliteTransaction _transaction;
+        private readonly SqliteTransaction? _transaction;
         private readonly SqliteConnection _connection;
 
-        public SqliteWithinTransactionExecutor(SqliteConnection connection, SqliteTransaction transaction)
+        public SqliteWithinTransactionExecutor(SqliteConnection connection, SqliteTransaction? transaction)
         {
             _connection = connection;
             _transaction = transaction;
