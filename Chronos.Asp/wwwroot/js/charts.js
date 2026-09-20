@@ -53,11 +53,21 @@ function niceHourAxis(maxHours) {
   return { step, max: step * Math.max(2, Math.ceil(maxHours / step)) };
 }
 
+/** Accounts ordered by their total time over all days, most first: the stack order (bottom to top) and the legend order. */
+function stackedBarAccountOrder(days) {
+  const weekTotals = new Map();
+  days.forEach((d) => d.accounts.forEach((a) => {
+    const entry = weekTotals.get(a.timeAccountId) || { id: a.timeAccountId, name: a.timeAccountName, seconds: 0 };
+    entry.seconds += a.duration;
+    weekTotals.set(a.timeAccountId, entry);
+  }));
+  return [...weekTotals.values()].sort((a, b) => b.seconds - a.seconds);
+}
+
 /** days: [{ date: "yyyy-MM-dd", totalWorkTime (seconds), accounts: [{ timeAccountId, timeAccountName, isWorkTime, duration (seconds) }] }]
-    One stacked bar per day (all accounts), plus a marker and label for that day's total work time. */
-function stackedBarChartHtml(days) {
-  const width = 720;
-  const height = 300;
+    One stacked bar per day (all accounts), plus a marker and label for that day's total work time.
+    width/height are the pixel size of the container the svg is drawn into, so the chart fills it 1:1. */
+function stackedBarChartHtml(days, width = 720, height = 300) {
   const margin = { top: 30, right: 16, bottom: 34, left: 52 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
@@ -68,14 +78,7 @@ function stackedBarChartHtml(days) {
   const yFor = (seconds) => margin.top + plotHeight - (seconds / 3600 / axis.max) * plotHeight;
 
   // Stack order is the same on every day: accounts with the most time this week at the bottom.
-  const weekTotals = new Map();
-  days.forEach((d) => d.accounts.forEach((a) => {
-    const entry = weekTotals.get(a.timeAccountId) || { id: a.timeAccountId, name: a.timeAccountName, seconds: 0 };
-    entry.seconds += a.duration;
-    weekTotals.set(a.timeAccountId, entry);
-  }));
-  const accountOrder = [...weekTotals.values()].sort((a, b) => b.seconds - a.seconds);
-  const orderIndex = new Map(accountOrder.map((a, i) => [a.id, i]));
+  const orderIndex = new Map(stackedBarAccountOrder(days).map((a, i) => [a.id, i]));
 
   const gridlines = [];
   for (let value = 0; value <= axis.max + 1e-9; value += axis.step) {
@@ -125,17 +128,20 @@ function stackedBarChartHtml(days) {
     ? `<text class="chart-axis-text" x="${margin.left + plotWidth / 2}" y="${margin.top + plotHeight / 2}" text-anchor="middle">No tracked time this week yet</text>`
     : '';
 
-  const legendItems = accountOrder.map((a) => `
-    <span class="legend-item"><span class="legend-dot" style="background:${escapeHtml(chartColorForAccount(a.id))}"></span>${escapeHtml(a.name)}</span>`).join('');
-
   return `
     <svg class="chart-bars" viewBox="0 0 ${width} ${height}" role="img" aria-label="Time by day and account, current week">
       ${gridlines.join('')}
       ${columns}
       ${emptyNote}
-    </svg>
-    <div class="legend">
-      ${legendItems}
-      <span class="legend-item"><span class="legend-line"></span>Total work time</span>
-    </div>`;
+    </svg>`;
+}
+
+/** Legend items (one per account, in stack order, plus the work-time marker) for the chart built from the same days. */
+function stackedBarLegendHtml(days) {
+  const legendItems = stackedBarAccountOrder(days).map((a) => `
+    <span class="legend-item"><span class="legend-dot" style="background:${escapeHtml(chartColorForAccount(a.id))}"></span>${escapeHtml(a.name)}</span>`).join('');
+
+  return `
+    ${legendItems}
+    <span class="legend-item"><span class="legend-line"></span>Total work time</span>`;
 }

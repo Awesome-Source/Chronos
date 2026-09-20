@@ -11,7 +11,7 @@ async function renderTimesheet() {
         <input type="date" id="timesheet-date" onchange="changeTimesheetDate(this.value)">
       </div>
     </div>
-    <div id="timesheet-content"><div class="panel"><p class="card-sub">Loading…</p></div></div>
+    <div class="sheet-content" id="timesheet-content"><div class="panel"><p class="card-sub">Loading…</p></div></div>
   `;
 
   if (!timesheetSelectedDate) {
@@ -68,47 +68,51 @@ function renderTimesheetContent(targets) {
   const byObjective = groupSum(targets, (t) => t.objectiveName, (t) => t.accumulatedTime);
 
   content.innerHTML = `
-    <div class="panel">
-      <div class="panel-title">Full time sheet</div>
-      <table class="data-table">
-        <thead><tr><th>Activity</th><th>Objective</th><th>Time account</th><th>Planned</th><th class="num">Duration</th></tr></thead>
-        <tbody>
-          ${targets.map((t) => `
-            <tr>
-              <td>${escapeHtml(t.activityName)}</td>
-              <td>${escapeHtml(t.objectiveName)}</td>
-              <td>${escapeHtml(t.timeAccountName)}</td>
-              <td>${t.isPlannedActivity ? '<span class="badge badge-planned">Planned</span>' : '<span class="badge badge-unplanned">Unplanned</span>'}</td>
-              <td class="num mono">${formatDuration(t.accumulatedTime)}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-    <div class="grid-dash">
-      <div class="panel">
-        <div class="panel-title">Day statistics</div>
-        <table class="data-table">
-          <tbody>
-            <tr><td>Total</td><td class="num mono">${formatDuration(totalSeconds)}</td></tr>
-            <tr><td>Planned</td><td class="num mono">${formatDuration(plannedSeconds)}</td></tr>
-            <tr><td>Unplanned</td><td class="num mono">${formatDuration(unplannedSeconds)}</td></tr>
-          </tbody>
-        </table>
+    <div class="sheet-layout">
+      <div class="panel panel-fill">
+        <div class="panel-title">Full time sheet</div>
+        <div class="panel-scroll">
+          <table class="data-table">
+            <thead><tr><th>Activity</th><th>Objective</th><th>Time account</th><th>Planned</th><th class="num">Duration</th></tr></thead>
+            <tbody>
+              ${targets.map((t) => `
+                <tr>
+                  <td>${escapeHtml(t.activityName)}</td>
+                  <td>${escapeHtml(t.objectiveName)}</td>
+                  <td>${escapeHtml(t.timeAccountName)}</td>
+                  <td>${t.isPlannedActivity ? '<span class="badge badge-planned">Planned</span>' : '<span class="badge badge-unplanned">Unplanned</span>'}</td>
+                  <td class="num mono">${formatDuration(t.accumulatedTime)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="panel">
-        <div class="panel-title">By time account</div>
-        ${summaryTable(byTimeAccount)}
-      </div>
-    </div>
-    <div class="grid-dash">
-      <div class="panel">
-        <div class="panel-title">By activity</div>
-        ${summaryTable(byActivity)}
-      </div>
-      <div class="panel">
-        <div class="panel-title">By objective</div>
-        ${summaryTable(byObjective)}
+      <div class="sheet-summary">
+        <div class="panel panel-fill">
+          <div class="panel-title">Day statistics</div>
+          <div class="panel-scroll">
+            <table class="data-table">
+              <tbody>
+                <tr><td>Total</td><td class="num mono">${formatDuration(totalSeconds)}</td></tr>
+                <tr><td>Planned</td><td class="num mono">${formatDuration(plannedSeconds)}</td></tr>
+                <tr><td>Unplanned</td><td class="num mono">${formatDuration(unplannedSeconds)}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel panel-fill">
+          <div class="panel-title">By time account</div>
+          <div class="panel-scroll">${summaryTable(byTimeAccount)}</div>
+        </div>
+        <div class="panel panel-fill">
+          <div class="panel-title">By activity</div>
+          <div class="panel-scroll">${summaryTable(byActivity)}</div>
+        </div>
+        <div class="panel panel-fill">
+          <div class="panel-title">By objective</div>
+          <div class="panel-scroll">${summaryTable(byObjective)}</div>
+        </div>
       </div>
     </div>
   `;

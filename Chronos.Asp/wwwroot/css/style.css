@@ -47,7 +47,7 @@ a{color:inherit;}
 .mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
 
 /* ---------- layout ---------- */
-.app{display:flex;min-height:100vh;}
+.app{display:flex;height:100vh;}
 
 .sidebar{
   width:236px;
@@ -94,7 +94,7 @@ a{color:inherit;}
   font-size:11.5px;
 }
 
-.main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;}
 
 .statusbar{
   display:flex;align-items:center;justify-content:space-between;
@@ -108,8 +108,11 @@ a{color:inherit;}
 .statusbar .sb-left strong{color:var(--text);font-weight:600;}
 .statusbar .sb-right{font-family:var(--font-mono);font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600;font-size:13px;}
 
-.page{display:none;padding:26px 28px 60px;max-width:1180px;}
-.page.active{display:block;}
+.page{display:none;padding:26px 28px 60px;}
+.page.active{display:block;flex:1;min-height:0;overflow:auto;}
+/* pages whose panels stretch to fill the whole page height (Dashboard, Time Sheet) */
+.page-fill.active{display:flex;flex-direction:column;}
+.page-fill > .page-head{flex:0 0 auto;}
 
 .page-head{
   display:flex;align-items:flex-end;justify-content:space-between;
@@ -120,15 +123,51 @@ a{color:inherit;}
 .page-head .sub{color:var(--text-muted);font-size:13px;margin-top:4px;display:block;}
 .page-head-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
 
-.grid-dash{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;}
-@media (max-width:820px){
-  .grid-dash{grid-template-columns:1fr;}
+/* Dashboard: two donut panels on top, the stacked bar chart below, together filling the page height */
+.dash-layout{
+  flex:1 1 0;
+  min-height:480px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  gap:18px;
 }
+.dash-layout > .panel.panel-fill{margin-top:0;}
+.dash-layout > .panel-wide{grid-column:1 / -1;}
 
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
-.grid-2 > .panel{margin-top:0;}
+/* Time Sheet: full sheet in the upper half, four equally sized panels in the lower half */
+.sheet-content{flex:1 1 0;min-height:480px;display:flex;flex-direction:column;}
+.sheet-layout{
+  flex:1 1 0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  gap:18px;
+}
+.sheet-summary{
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-rows:minmax(0,1fr);
+  gap:18px;
+}
+.sheet-summary > .panel.panel-fill{margin-top:0;}
+
 @media (max-width:820px){
-  .grid-2{grid-template-columns:1fr;}
+  .dash-layout{
+    flex:none;
+    min-height:0;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:none;
+    grid-auto-rows:minmax(320px,auto);
+  }
+  .sheet-content{flex:none;min-height:0;}
+  .sheet-layout{flex:none;grid-template-rows:360px auto;}
+  .sheet-summary{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:none;
+    grid-auto-rows:220px;
+  }
 }
 
 /* ---------- panels / cards ---------- */
@@ -140,6 +179,13 @@ a{color:inherit;}
 }
 .panel + .panel{margin-top:18px;}
 .panel-pad{padding:20px 22px;}
+/* panel that stretches with its grid cell; its body scrolls (.panel-scroll) instead of growing the cell */
+.panel-fill{display:flex;flex-direction:column;min-height:0;}
+.panel-fill > .panel-title{flex:0 0 auto;}
+.panel-scroll{flex:0 1 auto;min-height:0;overflow:auto;}
+.panel-scroll table.data-table th{position:sticky;top:0;background:var(--surface);}
+/* under a donut chart the table gets at most half the panel, so the donut keeps its share and the table scrolls */
+.donut-wrap + .panel-scroll{max-height:50%;}
 .panel-title{
   font-size:11.5px;
   font-weight:700;
@@ -189,10 +235,11 @@ a{color:inherit;}
 td .legend-dot{display:inline-block;margin-right:4px;}
 
 /* ---------- svg charts (js/charts.js) ---------- */
-.donut-wrap{display:flex;justify-content:center;margin-bottom:16px;}
-.chart-donut{width:100%;max-width:220px;height:auto;}
+.donut-wrap{flex:1 1 0;min-height:120px;position:relative;margin-bottom:16px;}
+.chart-donut{position:absolute;inset:0;width:100%;height:100%;}
 .chart-donut-value{fill:var(--text);font-family:var(--font-mono);font-size:14px;font-weight:600;}
-.chart-bars{display:block;width:100%;max-width:820px;height:auto;}
+.chart-fill{flex:1 1 0;min-height:0;position:relative;}
+.chart-bars{position:absolute;inset:0;display:block;width:100%;height:100%;}
 .chart-axis-text{fill:var(--text-muted);font-family:var(--font-mono);font-size:11px;}
 .chart-grid{stroke:var(--border);stroke-width:1;}
 .chart-work-label{fill:var(--accent);font-family:var(--font-mono);font-size:11px;font-weight:600;}

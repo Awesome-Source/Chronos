@@ -1,12 +1,17 @@
+/** The week's data behind the stacked bar chart; kept so the chart can be redrawn when its container is resized. */
+let dashboardWeekDays = null;
+
 function productivePanelHtml(idPrefix, title) {
   return `
-    <div class="panel">
+    <div class="panel panel-fill">
       <div class="panel-title">${title}</div>
       <div class="donut-wrap" id="${idPrefix}-donut"></div>
-      <table class="data-table">
-        <thead><tr><th>Time account</th><th class="num">Duration</th><th class="num">Share</th></tr></thead>
-        <tbody id="${idPrefix}-body"><tr><td class="empty-state" colspan="3">Loading…</td></tr></tbody>
-      </table>
+      <div class="panel-scroll">
+        <table class="data-table">
+          <thead><tr><th>Time account</th><th class="num">Duration</th><th class="num">Share</th></tr></thead>
+          <tbody id="${idPrefix}-body"><tr><td class="empty-state" colspan="3">Loading…</td></tr></tbody>
+        </table>
+      </div>
     </div>
   `;
 }
@@ -19,15 +24,19 @@ async function renderDashboard() {
       <div class="page-head">
         <div><h1>Dashboard</h1></div>
       </div>
-      <div class="grid-2">
+      <div class="dash-layout">
         ${productivePanelHtml('dashboard-all-time', 'Productive time by account (all time)')}
         ${productivePanelHtml('dashboard-week', 'Productive time by account (current week)')}
-      </div>
-      <div class="panel">
-        <div class="panel-title">Time by day and account (current week)</div>
-        <div id="dashboard-week-days"></div>
+        <div class="panel panel-fill panel-wide">
+          <div class="panel-title">Time by day and account (current week)</div>
+          <div class="chart-fill" id="dashboard-week-days"></div>
+          <div class="legend" id="dashboard-week-days-legend"></div>
+        </div>
       </div>
     `;
+
+    // The chart is drawn at its container's pixel size, so redraw whenever that size changes (window resize, page shown).
+    new ResizeObserver(drawDashboardWeekDays).observe(document.getElementById('dashboard-week-days'));
   }
 
   await refreshDashboard();
@@ -80,8 +89,18 @@ function renderProductivePanel(idPrefix, balances, emptyMessage) {
 }
 
 function renderDashboardWeekDays(days) {
-  const el = document.getElementById('dashboard-week-days');
-  if (!el) return;
+  dashboardWeekDays = days;
+  drawDashboardWeekDays();
+}
 
-  patchInnerHtml(el, stackedBarChartHtml(days));
+function drawDashboardWeekDays() {
+  const chart = document.getElementById('dashboard-week-days');
+  const legend = document.getElementById('dashboard-week-days-legend');
+  if (!chart || !legend || !dashboardWeekDays) return;
+
+  const { clientWidth: width, clientHeight: height } = chart;
+  if (!width || !height) return; // page hidden; the resize observer redraws once it has a size
+
+  patchInnerHtml(chart, stackedBarChartHtml(dashboardWeekDays, width, height));
+  patchInnerHtml(legend, stackedBarLegendHtml(dashboardWeekDays));
 }
