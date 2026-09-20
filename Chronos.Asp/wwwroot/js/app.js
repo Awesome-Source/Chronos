@@ -90,30 +90,40 @@ async function refreshMasterDataCache() {
 
 async function renderStatusBar() {
   const el = document.getElementById('statusbar');
+  let html = `<div class="sb-left">Not tracking</div><div class="sb-right"></div>`;
+
   try {
     const targets = await Api.getTodaysTargets();
     const active = targets.find((t) => t.isActive);
 
     if (active) {
-      el.innerHTML = `
+      html = `
         <div class="sb-left"><span class="pulse-dot"></span> Recording <strong>${escapeHtml(active.activityName)}</strong> - ${escapeHtml(active.objectiveName)}</div>
         <div class="sb-right mono">${formatDuration(active.accumulatedTime)}</div>
       `;
-    } else {
-      el.innerHTML = `<div class="sb-left">Not tracking</div><div class="sb-right"></div>`;
     }
   } catch {
-    el.innerHTML = `<div class="sb-left">Not tracking</div><div class="sb-right"></div>`;
+    // keep the "Not tracking" fallback
   }
+
+  patchInnerHtml(el, html);
 }
 
+let pollInFlight = false;
+
 async function pollActiveTracking() {
-  await renderStatusBar();
-  if (currentPage === 'tracking') {
-    await refreshTrackingTable();
-  }
-  if (currentPage === 'dashboard') {
-    await renderDashboard();
+  if (pollInFlight) return;
+  pollInFlight = true;
+  try {
+    await renderStatusBar();
+    if (currentPage === 'tracking') {
+      await refreshTrackingTable();
+    }
+    if (currentPage === 'dashboard') {
+      await refreshDashboard();
+    }
+  } finally {
+    pollInFlight = false;
   }
 }
 

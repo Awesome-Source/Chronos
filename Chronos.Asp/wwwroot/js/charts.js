@@ -9,7 +9,7 @@ function chartColorForAccount(timeAccountId) {
   return (account && account.color) || CHART_FALLBACK_COLORS[timeAccountId % CHART_FALLBACK_COLORS.length];
 }
 
-/** slices: [{ label, value (seconds), share (0..1), color }] */
+/** slices: [{ key (optional, keeps the arc's DOM node stable across re-renders), label, value (seconds), share (0..1), color }] */
 function donutChartHtml(slices) {
   const size = 200;
   const center = size / 2;
@@ -22,8 +22,9 @@ function donutChartHtml(slices) {
   const arcs = total > 0
     ? slices.filter((s) => s.value > 0).map((s) => {
       const length = (s.value / total) * circumference;
+      const keyAttr = s.key === undefined ? '' : ` data-key="${escapeHtml(s.key)}"`;
       const arc = `
-        <circle cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="${escapeHtml(s.color)}" stroke-width="${strokeWidth}"
+        <circle${keyAttr} cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="${escapeHtml(s.color)}" stroke-width="${strokeWidth}"
           stroke-dasharray="${length} ${circumference - length}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${center} ${center})">
           <title>${escapeHtml(s.label)}: ${formatDuration(s.value)} (${(s.share * 100).toFixed(1)}%)</title>
         </circle>`;

@@ -11,22 +11,30 @@ function productivePanelHtml(idPrefix, title) {
   `;
 }
 
+/** Builds the static page skeleton once; later calls keep it (and the data in it) and only refresh the data. */
 async function renderDashboard() {
   const page = document.getElementById('page-dashboard');
-  page.innerHTML = `
-    <div class="page-head">
-      <div><h1>Dashboard</h1></div>
-    </div>
-    <div class="grid-2">
-      ${productivePanelHtml('dashboard-all-time', 'Productive time by account (all time)')}
-      ${productivePanelHtml('dashboard-week', 'Productive time by account (current week)')}
-    </div>
-    <div class="panel">
-      <div class="panel-title">Time by day and account (current week)</div>
-      <div id="dashboard-week-days"></div>
-    </div>
-  `;
+  if (!page.firstElementChild) {
+    page.innerHTML = `
+      <div class="page-head">
+        <div><h1>Dashboard</h1></div>
+      </div>
+      <div class="grid-2">
+        ${productivePanelHtml('dashboard-all-time', 'Productive time by account (all time)')}
+        ${productivePanelHtml('dashboard-week', 'Productive time by account (current week)')}
+      </div>
+      <div class="panel">
+        <div class="panel-title">Time by day and account (current week)</div>
+        <div id="dashboard-week-days"></div>
+      </div>
+    `;
+  }
 
+  await refreshDashboard();
+}
+
+/** Fetches fresh dashboard data and patches it into the existing skeleton. */
+async function refreshDashboard() {
   try {
     const [balances, weekBalances, weekDays] = await Promise.all([
       Api.getStatisticsBalances(),
@@ -49,30 +57,31 @@ function renderProductivePanel(idPrefix, balances, emptyMessage) {
 
   const total = balances.reduce((sum, b) => sum + b.accumulatedDuration, 0);
 
-  donut.innerHTML = donutChartHtml(balances.map((b) => ({
+  patchInnerHtml(donut, donutChartHtml(balances.map((b) => ({
+    key: b.timeAccountId,
     label: b.timeAccountName,
     value: b.accumulatedDuration,
     share: b.proportion,
     color: chartColorForAccount(b.timeAccountId),
-  })));
+  }))));
 
   if (!balances.length || total === 0) {
-    body.innerHTML = `<tr><td class="empty-state" colspan="3">${emptyMessage}</td></tr>`;
+    patchInnerHtml(body, `<tr><td class="empty-state" colspan="3">${emptyMessage}</td></tr>`);
     return;
   }
 
-  body.innerHTML = balances.map((b) => `
-    <tr>
+  patchInnerHtml(body, balances.map((b) => `
+    <tr data-key="${b.timeAccountId}">
       <td><span class="legend-dot" style="background:${escapeHtml(chartColorForAccount(b.timeAccountId))}"></span> ${escapeHtml(b.timeAccountName)}</td>
       <td class="num mono">${formatDuration(b.accumulatedDuration)}</td>
       <td class="num mono">${(b.proportion * 100).toFixed(1)}%</td>
     </tr>
-  `).join('');
+  `).join(''));
 }
 
 function renderDashboardWeekDays(days) {
   const el = document.getElementById('dashboard-week-days');
   if (!el) return;
 
-  el.innerHTML = stackedBarChartHtml(days);
+  patchInnerHtml(el, stackedBarChartHtml(days));
 }

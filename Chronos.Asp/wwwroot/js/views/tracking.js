@@ -46,17 +46,17 @@ function renderTrackingRows(targets) {
   if (!body) return;
 
   if (!targets.length) {
-    body.innerHTML = `<tr><td class="empty-state" colspan="5">No activity targets for today yet. Use "New tracking target" to start one.</td></tr>`;
+    patchInnerHtml(body, `<tr><td class="empty-state" colspan="5">No activity targets for today yet. Use "New tracking target" to start one.</td></tr>`);
   } else {
-    body.innerHTML = targets.map((t) => `
-      <tr class="${t.isActive ? 'row-active' : ''} ${selectedTargetId === t.internalId ? 'row-selected' : ''}" style="cursor:pointer" onclick="selectTarget(${t.internalId})">
+    patchInnerHtml(body, targets.map((t) => `
+      <tr data-key="${t.internalId}" class="${t.isActive ? 'row-active' : ''} ${selectedTargetId === t.internalId ? 'row-selected' : ''}" style="cursor:pointer" onclick="selectTarget(${t.internalId})">
         <td>${escapeHtml(t.activityName)}</td>
         <td>${escapeHtml(t.objectiveName)}</td>
         <td>${escapeHtml(t.timeAccountName)}</td>
         <td>${t.isPlannedActivity ? '<span class="badge badge-planned">Planned</span>' : '<span class="badge badge-unplanned">Unplanned</span>'}</td>
         <td class="num mono">${formatDuration(t.accumulatedTime)} ${t.isActive ? '<span class="pulse-dot"></span>' : ''}</td>
       </tr>
-    `).join('');
+    `).join(''));
   }
 
   const startBtn = document.getElementById('tracking-start');
