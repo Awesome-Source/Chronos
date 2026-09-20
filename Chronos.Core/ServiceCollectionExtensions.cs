@@ -14,18 +14,36 @@ namespace Chronos.Core
     {
         public static void AddChronosCore(this IServiceCollection serviceCollection, string appDataDirectory)
         {
-            RegisterDatabaseServices(serviceCollection, appDataDirectory);
-            RegisterRepositories(serviceCollection);
-            RegisterServices(serviceCollection);            
-
-            serviceCollection.AddSingleton<ChronosCore>();
+            RegisterPersistentDatabaseServices(serviceCollection, appDataDirectory);
+            AddChronosCoreInternal(serviceCollection);
         }
 
-        private static void RegisterDatabaseServices(IServiceCollection serviceCollection, string appDataDirectory)
+        public static void AddInMemoryChronosCore(this IServiceCollection serviceCollection)
+        {
+            RegisterInMemoryDatabaseServices(serviceCollection);
+            AddChronosCoreInternal(serviceCollection);
+        }
+
+        private static void AddChronosCoreInternal(IServiceCollection serviceCollection)
+        {
+            RegisterRepositories(serviceCollection);
+            RegisterServices(serviceCollection);
+
+            serviceCollection.AddSingleton<ChronosCore>();
+        }        
+
+        private static void RegisterPersistentDatabaseServices(IServiceCollection serviceCollection, string appDataDirectory)
         {
             serviceCollection.AddTransient<IDatabaseAccessor, SqliteDataBaseAccessor>();
             serviceCollection.AddSingleton<IPatchInfoRepository, PatchInfoRepository>();
             serviceCollection.AddSingleton<IDatabaseConnectionConfiguration>(new DatabaseConnectionConfiguration(appDataDirectory));
+            serviceCollection.AddSingleton<DatabaseInitializer>();
+        }
+
+        private static void RegisterInMemoryDatabaseServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient<IDatabaseAccessor, SqliteInMemoryDataBaseAccessor>();
+            serviceCollection.AddSingleton<IPatchInfoRepository, PatchInfoRepository>();
             serviceCollection.AddSingleton<DatabaseInitializer>();
         }
 

@@ -7,6 +7,11 @@ namespace Chronos.Asp
 {
     public class Program
     {
+        /// <summary>
+        /// Environment name under which the in-memory database is used instead of the app data directory.
+        /// </summary>
+        public const string TestingEnvironmentName = "Testing";
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -19,8 +24,14 @@ namespace Chronos.Asp
 
             builder.Services.AddEndpointsApiExplorer();
 
-            var appDataDirectory = ResolveAppDataDirectory();
-            builder.Services.AddChronosCore(appDataDirectory);
+            if (builder.Environment.IsEnvironment(TestingEnvironmentName))
+            {
+                builder.Services.AddInMemoryChronosCore();
+            }
+            else
+            {
+                builder.Services.AddChronosCore(ResolveAppDataDirectory());
+            }
 
             var app = builder.Build();
             app.Services.GetRequiredService<ChronosCore>().Initialize();
