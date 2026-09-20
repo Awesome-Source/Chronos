@@ -1,9 +1,11 @@
-﻿using Chronos.Core.Contracts.DataObjects;
+using Chronos.Core.Contracts.DataObjects;
 
 namespace Chronos.Core.Contracts.Repositories
 {
     public interface IStatisticsRepository
     {
         IReadOnlyList<TimeAccountBalance> RetrieveAllProductiveTimeAccountBalances();
+
+        IReadOnlyList<DailyTimeAccountDuration> RetrieveDailyTimeAccountDurations(DateOnly from, DateOnly to);
     }
 }

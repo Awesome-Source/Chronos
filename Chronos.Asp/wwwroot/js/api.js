@@ -57,6 +57,8 @@ const Api = {
 
   // Statistics
   getStatisticsBalances: () => apiRequest('GET', '/statistics/productive-time-account-balances'),
+  getStatisticsBalancesCurrentWeek: () => apiRequest('GET', '/statistics/productive-time-account-balances/current-week'),
+  getStatisticsDailyDurationsCurrentWeek: () => apiRequest('GET', '/statistics/daily-time-account-durations/current-week'),
 
   // Tracking
   getTodaysTargets: () => apiRequest('GET', '/tracking/targets/today'),

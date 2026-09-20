@@ -20,5 +20,17 @@ namespace Chronos.Asp.Controllers
         {
             return Ok(_statisticsService.RetrieveAllProductiveTimeAccountBalances());
         }
+
+        [HttpGet("productive-time-account-balances/current-week")]
+        public ActionResult<IReadOnlyList<RelativeTimeAccountBalance>> GetCurrentWeekProductiveTimeAccountBalances()
+        {
+            return Ok(_statisticsService.RetrieveCurrentWeekProductiveTimeAccountBalances(DateOnly.FromDateTime(DateTime.Now)));
+        }
+
+        [HttpGet("daily-time-account-durations/current-week")]
+        public ActionResult<IReadOnlyList<DailyTimeAccountBreakdown>> GetCurrentWeekDailyBreakdown()
+        {
+            return Ok(_statisticsService.RetrieveCurrentWeekDailyBreakdown(DateOnly.FromDateTime(DateTime.Now)));
+        }
     }
 }
