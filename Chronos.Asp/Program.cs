@@ -1,18 +1,30 @@
+using Chronos.Asp.Extensions;
 using Chronos.Asp.Json;
 using Chronos.Asp.Middleware;
 using Chronos.Core;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Chronos.Asp
 {
     public class Program
     {
-        /// <summary>
-        /// Environment name under which the in-memory database is used instead of the app data directory.
-        /// </summary>
-        public const string TestingEnvironmentName = "Testing";
-
         public static void Main(string[] args)
+        {
+            var app = BuildApp(args);
+            var chronosCore = app.Services.GetRequiredService<ChronosCore>();
+            chronosCore.Initialize();
+
+            RegisterTrackingStopOnShutdown(app, chronosCore);
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles(CreateStaticFileOptionsForNoCacheInDevEnvironment(app));
+            app.UseExceptionHandler(ExceptionHandling.Configure);
+            app.UseAuthorization();
+            app.MapControllers();
+
+            app.Run();
+        }
+
+        private static WebApplication BuildApp(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +36,7 @@ namespace Chronos.Asp
 
             builder.Services.AddEndpointsApiExplorer();
 
-            if (builder.Environment.IsEnvironment(TestingEnvironmentName))
+            if (builder.Environment.IsTestEnvironment())
             {
                 builder.Services.AddInMemoryChronosCore();
             }
@@ -34,32 +46,40 @@ namespace Chronos.Asp
             }
 
             var app = builder.Build();
-            app.Services.GetRequiredService<ChronosCore>().Initialize();
+            return app;
+        }
 
-            app.UseDefaultFiles();
-            app.UseStaticFiles(new StaticFileOptions
+        private static StaticFileOptions CreateStaticFileOptionsForNoCacheInDevEnvironment(WebApplication app)
+        {
+            return new StaticFileOptions
             {
                 OnPrepareResponseAsync = context =>
                 {
-                    if(app.Environment.IsDevelopment())
+                    if (app.Environment.IsDevelopment())
                     {
                         context.Context.Response.Headers["Cache-Control"] = "No-Store";
                         return Task.CompletedTask;
                     }
 
-                    var maxAgeInSeconds = (int) TimeSpan.FromMinutes(5).TotalSeconds;
+                    var maxAgeInSeconds = (int)TimeSpan.FromMinutes(5).TotalSeconds;
                     context.Context.Response.Headers["Cache-Control"] = "public,max-age=" + maxAgeInSeconds;
 
                     return Task.CompletedTask;
                 }
+            };
+        }
+
+        private static void RegisterTrackingStopOnShutdown(WebApplication app, ChronosCore chronosCore)
+        {
+            if (app.Environment.IsTestEnvironment())
+            {
+                return;
+            }
+
+            app.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStopping.Register(() =>
+            {
+                chronosCore.TrackingService.StopTracking(TimeOnly.FromDateTime(DateTime.Now));
             });
-
-            app.UseExceptionHandler(ExceptionHandling.Configure);
-
-            app.UseAuthorization();
-            app.MapControllers();
-
-            app.Run();
         }
 
         private static string ResolveAppDataDirectory()
