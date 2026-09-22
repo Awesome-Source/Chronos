@@ -1,3 +1,4 @@
+using Chronos.Asp.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 
@@ -10,7 +11,7 @@ namespace Chronos.Asp.Tests
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.UseEnvironment(Program.TestingEnvironmentName);
+            builder.UseEnvironment(WebHostEnvironmentExtensions.TestingEnvironmentName);
         }
     }
 }
