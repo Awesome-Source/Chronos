@@ -65,7 +65,7 @@ function stackedBarAccountOrder(days) {
 }
 
 /** days: [{ date: "yyyy-MM-dd", totalWorkTime (seconds), accounts: [{ timeAccountId, timeAccountName, isWorkTime, duration (seconds) }] }]
-    One stacked bar per day (all accounts), plus a marker and label for that day's total work time.
+    One stacked bar per day (all accounts), plus a label for that day's total work time.
     width/height are the pixel size of the container the svg is drawn into, so the chart fills it 1:1. */
 function stackedBarChartHtml(days, width = 720, height = 300) {
   const margin = { top: 30, right: 16, bottom: 34, left: 52 };
@@ -110,16 +110,8 @@ function stackedBarChartHtml(days, width = 720, height = 300) {
           </rect>`;
       }).join('');
 
-    const workMarker = day.totalWorkTime > 0
-      ? `<line class="chart-work-marker-outline" x1="${cx - barWidth / 2 - 6}" x2="${cx + barWidth / 2 + 6}" y1="${yFor(day.totalWorkTime)}" y2="${yFor(day.totalWorkTime)}"></line>
-         <line class="chart-work-marker" x1="${cx - barWidth / 2 - 6}" x2="${cx + barWidth / 2 + 6}" y1="${yFor(day.totalWorkTime)}" y2="${yFor(day.totalWorkTime)}">
-           <title>Total work time: ${formatDuration(day.totalWorkTime)}</title>
-         </line>`
-      : '';
-
     return `
       ${segments}
-      ${workMarker}
       <text class="chart-work-label" x="${cx}" y="${yFor(dayTotals[i]) - 8}" text-anchor="middle">${formatDuration(day.totalWorkTime)}</text>
       <text class="chart-axis-text" x="${cx}" y="${height - margin.bottom + 18}" text-anchor="middle">${WEEKDAYS[date.getDay()]} ${date.getDate()}</text>`;
   }).join('');
@@ -136,12 +128,8 @@ function stackedBarChartHtml(days, width = 720, height = 300) {
     </svg>`;
 }
 
-/** Legend items (one per account, in stack order, plus the work-time marker) for the chart built from the same days. */
+/** Legend items (one per account, in stack order) for the chart built from the same days. */
 function stackedBarLegendHtml(days) {
-  const legendItems = stackedBarAccountOrder(days).map((a) => `
+  return stackedBarAccountOrder(days).map((a) => `
     <span class="legend-item"><span class="legend-dot" style="background:${escapeHtml(chartColorForAccount(a.id))}"></span>${escapeHtml(a.name)}</span>`).join('');
-
-  return `
-    ${legendItems}
-    <span class="legend-item"><span class="legend-line"></span>Total work time</span>`;
 }
